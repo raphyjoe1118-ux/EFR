@@ -1,4 +1,4 @@
-<Accounting Solutions>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,10 +6,14 @@
 
     <title>EFR Accounting Firm | Client Dashboard</title>
 
-    <!-- Supabase -->
+    <!-- =====================================================
+         SUPABASE
+    ====================================================== -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Google Picker -->
+    <!-- =====================================================
+         GOOGLE DRIVE / PICKER
+    ====================================================== -->
     <script
         async
         defer
@@ -36,9 +40,9 @@
             color: #1f2937;
         }
 
-        /* =========================
+        /* ============================
            LOGIN
-        ========================= */
+        ============================ */
 
         #loginPage {
             min-height: 100vh;
@@ -46,6 +50,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            background: #eef2f7;
         }
 
         .login-box {
@@ -54,7 +59,7 @@
             background: white;
             padding: 40px;
             border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.10);
+            box-shadow: 0 10px 40px rgba(0,0,0,.10);
         }
 
         .login-logo {
@@ -62,9 +67,9 @@
             margin-bottom: 30px;
         }
 
-        .login-logo .logo-circle {
-            width: 65px;
-            height: 65px;
+        .logo-circle {
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             margin: 0 auto 15px;
             background: #163a5f;
@@ -72,13 +77,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            font-size: 23px;
             font-weight: bold;
         }
 
         .login-logo h1 {
             margin: 0;
             color: #163a5f;
+            font-size: 28px;
         }
 
         .login-logo p {
@@ -86,9 +92,9 @@
             margin-top: 8px;
         }
 
-        /* =========================
-           APPLICATION
-        ========================= */
+        /* ============================
+           GENERAL
+        ============================ */
 
         .hidden {
             display: none !important;
@@ -151,9 +157,9 @@
             padding: 30px;
         }
 
-        /* =========================
+        /* ============================
            BUTTONS
-        ========================= */
+        ============================ */
 
         button {
             border: none;
@@ -193,9 +199,9 @@
             color: #1f2937;
         }
 
-        /* =========================
+        /* ============================
            DASHBOARD CARDS
-        ========================= */
+        ============================ */
 
         .cards {
             display: grid;
@@ -227,9 +233,9 @@
             color: #163a5f;
         }
 
-        /* =========================
+        /* ============================
            TOOLBAR
-        ========================= */
+        ============================ */
 
         .toolbar {
             background: white;
@@ -248,9 +254,9 @@
             margin: 0;
         }
 
-        /* =========================
+        /* ============================
            TABLE
-        ========================= */
+        ============================ */
 
         .table-container {
             background: white;
@@ -286,9 +292,9 @@
             background: #f9fafb;
         }
 
-        /* =========================
+        /* ============================
            STATUS
-        ========================= */
+        ============================ */
 
         .status {
             display: inline-block;
@@ -324,9 +330,9 @@
             color: #991b1b;
         }
 
-        /* =========================
+        /* ============================
            FORMS
-        ========================= */
+        ============================ */
 
         input,
         select,
@@ -360,9 +366,9 @@
             grid-column: 1 / -1;
         }
 
-        /* =========================
+        /* ============================
            MODAL
-        ========================= */
+        ============================ */
 
         .modal {
             display: none;
@@ -412,9 +418,9 @@
             flex: 1;
         }
 
-        /* =========================
+        /* ============================
            MESSAGES
-        ========================= */
+        ============================ */
 
         .message {
             margin-top: 15px;
@@ -435,6 +441,10 @@
             color: #6b7280;
         }
 
+        .muted {
+            color: #9ca3af;
+        }
+
         a {
             color: #2563eb;
             text-decoration: none;
@@ -444,9 +454,9 @@
             text-decoration: underline;
         }
 
-        /* =========================
+        /* ============================
            MOBILE
-        ========================= */
+        ============================ */
 
         @media (max-width: 700px) {
 
@@ -477,6 +487,9 @@
                 width: 100%;
             }
 
+            .drive-row {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -484,8 +497,8 @@
 <body>
 
 <!-- =========================================================
-     LOGIN PAGE
-========================================================= -->
+     LOGIN
+========================================================== -->
 
 <div id="loginPage">
 
@@ -513,7 +526,7 @@
                 type="email"
                 id="email"
                 placeholder="Enter your email"
-                autocomplete="email">
+                autocomplete="username">
 
         </div>
 
@@ -536,7 +549,7 @@
             style="width:100%;"
             onclick="login()">
 
-            Login
+            Sign In
 
         </button>
 
@@ -552,7 +565,7 @@
 
 <!-- =========================================================
      MAIN APPLICATION
-========================================================= -->
+========================================================== -->
 
 <div id="app" class="hidden">
 
@@ -598,7 +611,9 @@
 
     <main class="container">
 
-        <!-- DASHBOARD -->
+        <!-- =================================================
+             DASHBOARD
+        ================================================== -->
 
         <section class="cards">
 
@@ -635,7 +650,9 @@
         </section>
 
 
-        <!-- TOOLBAR -->
+        <!-- =================================================
+             SEARCH / FILTER
+        ================================================== -->
 
         <section class="toolbar">
 
@@ -686,7 +703,9 @@
         </section>
 
 
-        <!-- CLIENT TABLE -->
+        <!-- =================================================
+             CLIENT TABLE
+        ================================================== -->
 
         <section class="table-container">
 
@@ -723,7 +742,7 @@
 
 <!-- =========================================================
      CLIENT MODAL
-========================================================= -->
+========================================================== -->
 
 <div
     id="clientModal"
@@ -741,12 +760,11 @@
                 class="btn-light"
                 onclick="closeModal()">
 
-                ✕
+                X
 
             </button>
 
         </div>
-
 
         <input
             type="hidden"
@@ -843,8 +861,8 @@
                 <input
                     type="number"
                     id="invoiceAmount"
-                    step="0.01"
                     min="0"
+                    step="0.01"
                     placeholder="0.00">
 
             </div>
@@ -934,6 +952,10 @@
 
                 </div>
 
+                <small class="muted">
+                    Connect the client's Google Drive file or folder.
+                </small>
+
             </div>
 
         </div>
@@ -967,16 +989,21 @@
 <script>
 
 /* =========================================================
-   CONFIGURATION
-   REPLACE THESE VALUES
+   SUPABASE CONFIGURATION
+   PROVIDED FOR EFR ACCOUNTING FIRM
 ========================================================= */
 
 const SUPABASE_URL =
-    "YOUR_SUPABASE_URL";
+    "https://ujsnwtbdoumtqnnvopti.supabase.co";
 
 const SUPABASE_ANON_KEY =
-    "YOUR_SUPABASE_ANON_KEY";
+    "sb_publishable_lXhvukwKVSEuQC0UlBPuLg_KNWRxfpW";
 
+
+/* =========================================================
+   GOOGLE CONFIGURATION
+   STILL NEEDS YOUR GOOGLE CLOUD VALUES
+========================================================= */
 
 const GOOGLE_CLIENT_ID =
     "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
@@ -989,7 +1016,7 @@ const GOOGLE_APP_ID =
 
 
 /* =========================================================
-   GLOBAL VARIABLES
+   SUPABASE CLIENT
 ========================================================= */
 
 const supabaseClient =
@@ -998,11 +1025,16 @@ const supabaseClient =
         SUPABASE_ANON_KEY
     );
 
+
+/* =========================================================
+   APPLICATION VARIABLES
+========================================================= */
+
 let clients = [];
 
-let currentRole = null;
-
 let currentUser = null;
+
+let currentRole = null;
 
 let tokenClient = null;
 
@@ -1020,14 +1052,18 @@ let gisReady = false;
 async function login() {
 
     const email =
-        document.getElementById("email").value.trim();
+        document.getElementById("email")
+        .value
+        .trim();
 
     const password =
-        document.getElementById("password").value;
-
+        document.getElementById("password")
+        .value;
 
     const message =
-        document.getElementById("loginMessage");
+        document.getElementById(
+            "loginMessage"
+        );
 
 
     message.textContent = "";
@@ -1043,7 +1079,6 @@ async function login() {
         message.classList.add("error");
 
         return;
-
     }
 
 
@@ -1057,12 +1092,12 @@ async function login() {
     if (error) {
 
         message.textContent =
+            "Login failed: " +
             error.message;
 
         message.classList.add("error");
 
         return;
-
     }
 
 
@@ -1074,21 +1109,21 @@ async function login() {
 
 
 /* =========================================================
-   INITIALIZE APPLICATION
+   INITIALIZE APP
 ========================================================= */
 
 async function initializeApp() {
 
     const {
-        data: { user }
+        data: {
+            user
+        }
     } =
         await supabaseClient.auth.getUser();
 
 
     if (!user) {
-
         return;
-
     }
 
 
@@ -1106,17 +1141,17 @@ async function initializeApp() {
     if (error || !roleData) {
 
         alert(
-            "Your account does not have an assigned role. Contact the EFR Accounting Firm administrator."
+            "This user does not have an EFR Accounting Firm role assigned in Supabase."
         );
 
         await supabaseClient.auth.signOut();
 
         return;
-
     }
 
 
-    currentRole = roleData.role;
+    currentRole =
+        roleData.role;
 
 
     document
@@ -1151,9 +1186,12 @@ async function loadClients() {
         await supabaseClient
         .from("clients")
         .select("*")
-        .order("created_at", {
-            ascending: false
-        });
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
 
 
     if (error) {
@@ -1164,11 +1202,12 @@ async function loadClients() {
         );
 
         return;
-
     }
 
 
-    clients = data || [];
+    clients =
+        data || [];
+
 
     updateDashboard();
 
@@ -1193,8 +1232,8 @@ function updateDashboard() {
         "reviewClients"
     ).textContent =
         clients.filter(
-            client =>
-                client.status === "Under Review"
+            c =>
+                c.status === "Under Review"
         ).length;
 
 
@@ -1202,8 +1241,8 @@ function updateDashboard() {
         "pendingClients"
     ).textContent =
         clients.filter(
-            client =>
-                client.status === "Pending"
+            c =>
+                c.status === "Pending"
         ).length;
 
 
@@ -1211,8 +1250,8 @@ function updateDashboard() {
         "completedClients"
     ).textContent =
         clients.filter(
-            client =>
-                client.status === "Completed"
+            c =>
+                c.status === "Completed"
         ).length;
 
 
@@ -1220,25 +1259,25 @@ function updateDashboard() {
         "overdueClients"
     ).textContent =
         clients.filter(
-            client =>
-                client.status === "Overdue"
+            c =>
+                c.status === "Overdue"
         ).length;
 
 
     const outstanding =
         clients
-            .filter(
-                client =>
-                    client.status !== "Completed"
-            )
-            .reduce(
-                (total, client) =>
-                    total +
-                    Number(
-                        client.invoice_amount || 0
-                    ),
-                0
-            );
+        .filter(
+            c =>
+                c.status !== "Completed"
+        )
+        .reduce(
+            (sum, c) =>
+                sum +
+                Number(
+                    c.invoice_amount || 0
+                ),
+            0
+        );
 
 
     document.getElementById(
@@ -1257,23 +1296,25 @@ function updateDashboard() {
 
 
 /* =========================================================
-   CLIENT TABLE
+   RENDER CLIENTS
 ========================================================= */
 
 function renderClients() {
 
     const search =
-        document
-            .getElementById("search")
-            .value
-            .toLowerCase()
-            .trim();
+        document.getElementById(
+            "search"
+        )
+        .value
+        .toLowerCase()
+        .trim();
 
 
     const selectedStatus =
         document.getElementById(
             "statusFilter"
-        ).value;
+        )
+        .value;
 
 
     const filtered =
@@ -1294,18 +1335,20 @@ function renderClients() {
                 .toLowerCase();
 
 
-            const matchesSearch =
-                searchableText.includes(search);
-
-
-            const matchesStatus =
-                !selectedStatus ||
-                client.status === selectedStatus;
-
-
             return (
-                matchesSearch &&
-                matchesStatus
+
+                searchableText.includes(
+                    search
+                )
+
+                &&
+
+                (
+                    !selectedStatus ||
+                    client.status ===
+                    selectedStatus
+                )
+
             );
 
         });
@@ -1335,7 +1378,6 @@ function renderClients() {
         `;
 
         return;
-
     }
 
 
@@ -1354,50 +1396,31 @@ function renderClients() {
         row.innerHTML = `
 
             <td>
-
                 <strong>
                     ${escapeHtml(
                         client.company_name || ""
                     )}
                 </strong>
-
-                ${
-                    client.notes
-                        ?
-                        `<br>
-                         <small>
-                            ${escapeHtml(
-                                client.notes
-                            )}
-                         </small>`
-                        :
-                        ""
-                }
-
             </td>
 
-
             <td>
-
                 ${escapeHtml(
                     client.contact_name || ""
                 )}
 
                 ${
                     client.email
-                        ?
-                        `<br>
-                         <small>
-                            ${escapeHtml(
-                                client.email
-                            )}
-                         </small>`
-                        :
-                        ""
+                    ?
+                    `<br>
+                     <small>
+                        ${escapeHtml(
+                            client.email
+                        )}
+                     </small>`
+                    :
+                    ""
                 }
-
             </td>
-
 
             <td>
                 ${escapeHtml(
@@ -1405,13 +1428,11 @@ function renderClients() {
                 )}
             </td>
 
-
             <td>
                 ${escapeHtml(
                     client.invoice_number || ""
                 )}
             </td>
-
 
             <td>
                 $${Number(
@@ -1425,7 +1446,6 @@ function renderClients() {
                 )}
             </td>
 
-
             <td>
                 ${escapeHtml(
                     formatDate(
@@ -1434,20 +1454,13 @@ function renderClients() {
                 )}
             </td>
 
-
             <td>
-
-                <span
-                    class="status ${statusClass}">
-
+                <span class="status ${statusClass}">
                     ${escapeHtml(
                         client.status
                     )}
-
                 </span>
-
             </td>
-
 
             <td>
 
@@ -1467,13 +1480,12 @@ function renderClients() {
                     </a>
                     `
                     :
-                    `<span style="color:#9ca3af;">
+                    `<span class="muted">
                         Not connected
                      </span>`
                 }
 
             </td>
-
 
             <td>
 
@@ -1484,7 +1496,6 @@ function renderClients() {
                     Edit
 
                 </button>
-
 
                 ${
                     currentRole === "admin"
@@ -1503,7 +1514,6 @@ function renderClients() {
                 }
 
             </td>
-
         `;
 
 
@@ -1515,7 +1525,7 @@ function renderClients() {
 
 
 /* =========================================================
-   STATUS CLASS
+   STATUS
 ========================================================= */
 
 function getStatusClass(status) {
@@ -1546,31 +1556,7 @@ function getStatusClass(status) {
 
 
 /* =========================================================
-   DATE FORMAT
-========================================================= */
-
-function formatDate(dateString) {
-
-    if (!dateString) {
-        return "";
-    }
-
-
-    const date =
-        new Date(
-            dateString + "T00:00:00"
-        );
-
-
-    return date.toLocaleDateString(
-        "en-US"
-    );
-
-}
-
-
-/* =========================================================
-   OPEN NEW CLIENT
+   NEW CLIENT
 ========================================================= */
 
 function openNewClient() {
@@ -1591,13 +1577,14 @@ function openNewClient() {
 
     document.getElementById(
         "clientModal"
-    ).style.display = "flex";
+    ).style.display =
+        "flex";
 
 }
 
 
 /* =========================================================
-   CLEAR CLIENT FORM
+   CLEAR FORM
 ========================================================= */
 
 function clearForm() {
@@ -1606,52 +1593,42 @@ function clearForm() {
         "companyName"
     ).value = "";
 
-
     document.getElementById(
         "contactName"
     ).value = "";
-
 
     document.getElementById(
         "clientEmail"
     ).value = "";
 
-
     document.getElementById(
         "clientPhone"
     ).value = "";
-
 
     document.getElementById(
         "service"
     ).value = "";
 
-
     document.getElementById(
         "invoiceNumber"
     ).value = "";
-
 
     document.getElementById(
         "invoiceAmount"
     ).value = "";
 
-
     document.getElementById(
         "dueDate"
     ).value = "";
-
 
     document.getElementById(
         "clientStatus"
     ).value =
         "Under Review";
 
-
     document.getElementById(
         "notes"
     ).value = "";
-
 
     document.getElementById(
         "driveFolderUrl"
@@ -1668,8 +1645,8 @@ function editClient(id) {
 
     const client =
         clients.find(
-            item =>
-                item.id === id
+            c =>
+                c.id === id
         );
 
 
@@ -1741,7 +1718,8 @@ function editClient(id) {
     document.getElementById(
         "clientStatus"
     ).value =
-        client.status || "Under Review";
+        client.status ||
+        "Under Review";
 
 
     document.getElementById(
@@ -1758,7 +1736,8 @@ function editClient(id) {
 
     document.getElementById(
         "clientModal"
-    ).style.display = "flex";
+    ).style.display =
+        "flex";
 
 }
 
@@ -1769,10 +1748,22 @@ function editClient(id) {
 
 async function saveClient() {
 
+    if (!currentUser) {
+
+        alert(
+            "Your login session has expired."
+        );
+
+        return;
+    }
+
+
     const companyName =
         document.getElementById(
             "companyName"
-        ).value.trim();
+        )
+        .value
+        .trim();
 
 
     if (!companyName) {
@@ -1782,22 +1773,10 @@ async function saveClient() {
         );
 
         return;
-
     }
 
 
-    if (!currentUser) {
-
-        alert(
-            "Your session has expired. Please log in again."
-        );
-
-        return;
-
-    }
-
-
-    const id =
+    const clientId =
         document.getElementById(
             "clientId"
         ).value;
@@ -1811,54 +1790,71 @@ async function saveClient() {
         contact_name:
             document.getElementById(
                 "contactName"
-            ).value.trim(),
+            )
+            .value
+            .trim(),
 
         email:
             document.getElementById(
                 "clientEmail"
-            ).value.trim(),
+            )
+            .value
+            .trim(),
 
         phone:
             document.getElementById(
                 "clientPhone"
-            ).value.trim(),
+            )
+            .value
+            .trim(),
 
         service:
             document.getElementById(
                 "service"
-            ).value.trim(),
+            )
+            .value
+            .trim(),
 
         invoice_number:
             document.getElementById(
                 "invoiceNumber"
-            ).value.trim(),
+            )
+            .value
+            .trim(),
 
         invoice_amount:
             Number(
                 document.getElementById(
                     "invoiceAmount"
-                ).value || 0
+                )
+                .value || 0
             ),
 
         due_date:
             document.getElementById(
                 "dueDate"
-            ).value || null,
+            )
+            .value || null,
 
         status:
             document.getElementById(
                 "clientStatus"
-            ).value,
+            )
+            .value,
 
         notes:
             document.getElementById(
                 "notes"
-            ).value.trim(),
+            )
+            .value
+            .trim(),
 
         drive_folder_url:
             document.getElementById(
                 "driveFolderUrl"
-            ).value.trim(),
+            )
+            .value
+            .trim(),
 
         updated_by:
             currentUser.id
@@ -1869,18 +1865,19 @@ async function saveClient() {
     let response;
 
 
-    if (id) {
+    if (clientId) {
 
         response =
             await supabaseClient
             .from("clients")
             .update(record)
-            .eq("id", id);
+            .eq("id", clientId);
 
     } else {
 
         record.created_by =
             currentUser.id;
+
 
         response =
             await supabaseClient
@@ -1893,12 +1890,11 @@ async function saveClient() {
     if (response.error) {
 
         alert(
-            "Unable to save client: " +
+            "Unable to save client:\n\n" +
             response.error.message
         );
 
         return;
-
     }
 
 
@@ -1918,22 +1914,21 @@ async function deleteClient(id) {
     if (currentRole !== "admin") {
 
         alert(
-            "Only administrators can delete clients."
+            "Only an administrator can delete clients."
         );
 
         return;
-
     }
 
 
-    const confirmed =
-        confirm(
+    if (
+        !confirm(
             "Are you sure you want to permanently delete this client?"
-        );
+        )
+    ) {
 
-
-    if (!confirmed) {
         return;
+
     }
 
 
@@ -1947,12 +1942,11 @@ async function deleteClient(id) {
     if (error) {
 
         alert(
-            "Unable to delete client: " +
+            "Unable to delete client:\n\n" +
             error.message
         );
 
         return;
-
     }
 
 
@@ -1976,7 +1970,7 @@ function closeModal() {
 
 
 /* =========================================================
-   GOOGLE API
+   GOOGLE DRIVE
 ========================================================= */
 
 function gapiLoaded() {
@@ -1987,8 +1981,10 @@ function gapiLoaded() {
 
         gapi.load(
             "picker",
-            () => {
+            function() {
+
                 pickerReady = true;
+
             }
         );
 
@@ -2017,7 +2013,8 @@ function gisLoaded() {
             scope:
                 "https://www.googleapis.com/auth/drive.readonly",
 
-            callback: function() {}
+            callback:
+                function() {}
 
         });
 
@@ -2027,17 +2024,16 @@ function gisLoaded() {
 }
 
 
-/* =========================================================
-   GOOGLE DRIVE PICKER
-========================================================= */
-
 function openDrivePicker() {
 
-    if (!GOOGLE_CLIENT_ID ||
-        GOOGLE_CLIENT_ID.includes("YOUR_")) {
+    if (
+        GOOGLE_CLIENT_ID.includes(
+            "YOUR_"
+        )
+    ) {
 
         alert(
-            "Google Drive has not been configured yet. Add your Google Client ID, API Key, and Project Number to this file."
+            "Google Drive still needs to be configured."
         );
 
         return;
@@ -2121,10 +2117,6 @@ function openDrivePicker() {
 }
 
 
-/* =========================================================
-   GOOGLE PICKER CALLBACK
-========================================================= */
-
 function pickerCallback(data) {
 
     if (
@@ -2160,11 +2152,13 @@ async function logout() {
 
     await supabaseClient.auth.signOut();
 
+
     currentUser = null;
 
     currentRole = null;
 
     clients = [];
+
 
     document
         .getElementById("app")
@@ -2189,12 +2183,13 @@ async function logout() {
 
 
 /* =========================================================
-   SECURITY HELPERS
+   HTML SECURITY
 ========================================================= */
 
 function escapeHtml(value) {
 
     return String(value)
+
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
@@ -2207,6 +2202,7 @@ function escapeHtml(value) {
 function escapeAttribute(value) {
 
     return String(value)
+
         .replaceAll("&", "&amp;")
         .replaceAll('"', "&quot;")
         .replaceAll("<", "&lt;")
@@ -2216,7 +2212,7 @@ function escapeAttribute(value) {
 
 
 /* =========================================================
-   SESSION CHECK
+   AUTO-LOGIN
 ========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
