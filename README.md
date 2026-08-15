@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Accounting Client Dashboard</title>
+    <title>EFR Accounting Firm | Client Dashboard</title>
 
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Google APIs -->
+    <!-- Google Picker -->
     <script
         async
         defer
@@ -25,245 +25,582 @@
     </script>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
 
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
             color: #1f2937;
         }
 
-        header {
-            background: #1f2937;
-            color: white;
-            padding: 20px 30px;
+        /* =========================
+           LOGIN
+        ========================= */
 
+        #loginPage {
+            min-height: 100vh;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.10);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo .logo-circle {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background: #163a5f;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .login-logo h1 {
+            margin: 0;
+            color: #163a5f;
+        }
+
+        .login-logo p {
+            color: #6b7280;
+            margin-top: 8px;
+        }
+
+        /* =========================
+           APPLICATION
+        ========================= */
+
+        .hidden {
+            display: none !important;
+        }
+
+        .topbar {
+            background: #163a5f;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.12);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-logo {
+            width: 46px;
+            height: 46px;
+            background: white;
+            color: #163a5f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .brand small {
+            display: block;
+            margin-top: 3px;
+            opacity: .85;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .user-role {
+            font-size: 14px;
+            opacity: .9;
         }
 
         .container {
-            max-width: 1400px;
-            margin: auto;
+            max-width: 1500px;
+            margin: 0 auto;
             padding: 30px;
         }
 
-        .login {
-            max-width: 420px;
-            margin: 100px auto;
-            background: white;
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 5px 25px rgba(0,0,0,.1);
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 11px;
-            margin: 7px 0 15px;
-            border: 1px solid #d1d5db;
-            border-radius: 7px;
-        }
+        /* =========================
+           BUTTONS
+        ========================= */
 
         button {
             border: none;
-            padding: 10px 16px;
             border-radius: 7px;
+            padding: 10px 15px;
             cursor: pointer;
-            background: #2563eb;
-            color: white;
-            margin-right: 5px;
+            font-size: 14px;
+            transition: .2s;
         }
 
         button:hover {
             opacity: .9;
         }
 
-        .logout {
-            background: #dc2626;
+        .btn-primary {
+            background: #2563eb;
+            color: white;
         }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-light {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        /* =========================
+           DASHBOARD CARDS
+        ========================= */
 
         .cards {
             display: grid;
-            grid-template-columns:
-                repeat(auto-fit, minmax(200px, 1fr));
-
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(190px, 1fr)
+            );
+            gap: 18px;
+            margin-bottom: 25px;
         }
 
         .card {
             background: white;
-            padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,.06);
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05);
+        }
+
+        .card h4 {
+            margin: 0 0 10px;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: normal;
         }
 
         .card h2 {
             margin: 0;
-            font-size: 30px;
+            font-size: 28px;
+            color: #163a5f;
         }
+
+        /* =========================
+           TOOLBAR
+        ========================= */
 
         .toolbar {
             background: white;
-            padding: 20px;
+            padding: 18px;
             border-radius: 12px;
             margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .toolbar input,
+        .toolbar select {
+            width: auto;
+            min-width: 220px;
+            margin: 0;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05);
         }
 
         table {
             width: 100%;
-            background: white;
             border-collapse: collapse;
-            border-radius: 10px;
-            overflow: hidden;
+            min-width: 1100px;
         }
 
         th,
         td {
-            padding: 13px;
-            border-bottom: 1px solid #e5e7eb;
+            padding: 13px 14px;
             text-align: left;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         th {
-            background: #374151;
+            background: #1f2937;
             color: white;
+            font-size: 13px;
         }
+
+        td {
+            font-size: 14px;
+        }
+
+        tr:hover td {
+            background: #f9fafb;
+        }
+
+        /* =========================
+           STATUS
+        ========================= */
 
         .status {
-            padding: 5px 9px;
-            border-radius: 15px;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
-        .under-review {
+        .status-under-review {
             background: #fef3c7;
+            color: #92400e;
         }
 
-        .pending {
+        .status-pending {
             background: #dbeafe;
+            color: #1e40af;
         }
 
-        .completed {
+        .status-completed {
             background: #dcfce7;
+            color: #166534;
         }
 
-        .archived {
+        .status-archived {
             background: #e5e7eb;
+            color: #374151;
         }
 
-        .overdue {
+        .status-overdue {
             background: #fee2e2;
             color: #991b1b;
         }
+
+        /* =========================
+           FORMS
+        ========================= */
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font: inherit;
+            background: white;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .form-grid .full {
+            grid-column: 1 / -1;
+        }
+
+        /* =========================
+           MODAL
+        ========================= */
 
         .modal {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,.5);
+            background: rgba(0,0,0,.50);
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            z-index: 1000;
         }
 
         .modal-content {
-            width: 90%;
-            max-width: 700px;
             background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-height: 90vh;
+            width: 100%;
+            max-width: 800px;
+            max-height: 92vh;
             overflow-y: auto;
+            padding: 30px;
+            border-radius: 14px;
         }
 
-        .drive-button {
-            background: #16a34a;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        .hidden {
-            display: none !important;
+        .modal-header h2 {
+            margin: 0;
+            color: #163a5f;
         }
 
-        @media(max-width: 800px) {
+        .modal-footer {
+            margin-top: 20px;
+            display: flex;
+            gap: 8px;
+        }
 
-            table {
-                font-size: 12px;
+        .drive-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .drive-row input {
+            flex: 1;
+        }
+
+        /* =========================
+           MESSAGES
+        ========================= */
+
+        .message {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .error {
+            color: #dc2626;
+        }
+
+        .success {
+            color: #16a34a;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #6b7280;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .topbar-right {
+                width: 100%;
+                justify-content: space-between;
             }
 
             .container {
                 padding: 15px;
             }
 
-        }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
 
+            .form-grid .full {
+                grid-column: auto;
+            }
+
+            .toolbar input,
+            .toolbar select {
+                width: 100%;
+            }
+
+        }
     </style>
 </head>
 
-
 <body>
 
-<!-- LOGIN -->
+<!-- =========================================================
+     LOGIN PAGE
+========================================================= -->
 
-<div id="loginPage" class="login">
+<div id="loginPage">
 
-    <h1>Accounting Dashboard</h1>
+    <div class="login-box">
 
-    <p>Sign in to continue.</p>
+        <div class="login-logo">
 
-    <input
-        type="email"
-        id="email"
-        placeholder="Email">
+            <div class="logo-circle">
+                EFR
+            </div>
 
-    <input
-        type="password"
-        id="password"
-        placeholder="Password">
+            <h1>EFR Accounting Firm</h1>
 
-    <button onclick="login()">
-        Login
-    </button>
+            <p>Client Management Portal</p>
 
-    <p id="loginMessage"></p>
+        </div>
+
+        <div class="form-group">
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                autocomplete="email">
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password">
+
+        </div>
+
+        <button
+            class="btn-primary"
+            style="width:100%;"
+            onclick="login()">
+
+            Login
+
+        </button>
+
+        <div
+            id="loginMessage"
+            class="message">
+        </div>
+
+    </div>
 
 </div>
 
 
-<!-- APPLICATION -->
+<!-- =========================================================
+     MAIN APPLICATION
+========================================================= -->
 
 <div id="app" class="hidden">
 
-    <header>
+    <header class="topbar">
 
-        <div>
-            <h2>Client Accounting Dashboard</h2>
-            <span id="userRole"></span>
+        <div class="brand">
+
+            <div class="brand-logo">
+                EFR
+            </div>
+
+            <div>
+
+                <h2>EFR Accounting Firm</h2>
+
+                <small>
+                    Client Accounting Dashboard
+                </small>
+
+            </div>
+
         </div>
 
-        <button
-            class="logout"
-            onclick="logout()">
-            Logout
-        </button>
+        <div class="topbar-right">
+
+            <span
+                class="user-role"
+                id="userRole">
+            </span>
+
+            <button
+                class="btn-danger"
+                onclick="logout()">
+
+                Logout
+
+            </button>
+
+        </div>
 
     </header>
 
 
-    <div class="container">
+    <main class="container">
 
+        <!-- DASHBOARD -->
 
-        <!-- DASHBOARD CARDS -->
-
-        <div class="cards">
+        <section class="cards">
 
             <div class="card">
                 <h4>Total Clients</h4>
@@ -292,21 +629,26 @@
 
             <div class="card">
                 <h4>Outstanding</h4>
-                <h2 id="outstanding">$0</h2>
+                <h2 id="outstanding">$0.00</h2>
             </div>
 
-        </div>
+        </section>
 
 
         <!-- TOOLBAR -->
 
-        <div class="toolbar">
+        <section class="toolbar">
 
-            <button onclick="openNewClient()">
+            <button
+                class="btn-primary"
+                onclick="openNewClient()">
+
                 + Add Client
+
             </button>
 
             <input
+                type="search"
                 id="search"
                 placeholder="Search clients..."
                 oninput="renderClients()">
@@ -315,51 +657,73 @@
                 id="statusFilter"
                 onchange="renderClients()">
 
-                <option value="">All Statuses</option>
-                <option>Under Review</option>
-                <option>Pending</option>
-                <option>Completed</option>
-                <option>Archived</option>
-                <option>Overdue</option>
+                <option value="">
+                    All Statuses
+                </option>
+
+                <option>
+                    Under Review
+                </option>
+
+                <option>
+                    Pending
+                </option>
+
+                <option>
+                    Completed
+                </option>
+
+                <option>
+                    Archived
+                </option>
+
+                <option>
+                    Overdue
+                </option>
 
             </select>
 
-        </div>
+        </section>
 
 
         <!-- CLIENT TABLE -->
 
-        <table>
+        <section class="table-container">
 
-            <thead>
+            <table>
 
-                <tr>
+                <thead>
 
-                    <th>Client</th>
-                    <th>Contact</th>
-                    <th>Service</th>
-                    <th>Invoice</th>
-                    <th>Amount</th>
-                    <th>Due</th>
-                    <th>Status</th>
-                    <th>Drive</th>
-                    <th>Actions</th>
+                    <tr>
 
-                </tr>
+                        <th>Client</th>
+                        <th>Contact</th>
+                        <th>Service</th>
+                        <th>Invoice</th>
+                        <th>Amount</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Google Drive</th>
+                        <th>Actions</th>
 
-            </thead>
+                    </tr>
 
-            <tbody id="clientTable"></tbody>
+                </thead>
 
-        </table>
+                <tbody id="clientTable"></tbody>
 
+            </table>
 
-    </div>
+        </section>
+
+    </main>
 
 </div>
 
 
-<!-- CLIENT MODAL -->
+<!-- =========================================================
+     CLIENT MODAL
+========================================================= -->
 
 <div
     id="clientModal"
@@ -367,88 +731,233 @@
 
     <div class="modal-content">
 
-        <h2 id="modalTitle">
-            Add Client
-        </h2>
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                Add Client
+            </h2>
+
+            <button
+                class="btn-light"
+                onclick="closeModal()">
+
+                ✕
+
+            </button>
+
+        </div>
+
 
         <input
             type="hidden"
             id="clientId">
 
-        <label>Company Name</label>
-        <input id="companyName">
 
-        <label>Contact Name</label>
-        <input id="contactName">
+        <div class="form-grid">
 
-        <label>Email</label>
-        <input id="clientEmail">
+            <div class="form-group">
 
-        <label>Phone</label>
-        <input id="clientPhone">
+                <label>
+                    Company Name *
+                </label>
 
-        <label>Service</label>
-        <input id="service">
+                <input
+                    id="companyName"
+                    placeholder="ABC Company">
 
-        <label>Invoice Number</label>
-        <input id="invoiceNumber">
-
-        <label>Invoice Amount</label>
-        <input
-            type="number"
-            id="invoiceAmount"
-            step="0.01">
-
-        <label>Due Date</label>
-        <input
-            type="date"
-            id="dueDate">
-
-        <label>Status</label>
-
-        <select id="clientStatus">
-
-            <option>Under Review</option>
-            <option>Pending</option>
-            <option>Completed</option>
-            <option>Archived</option>
-            <option>Overdue</option>
-
-        </select>
+            </div>
 
 
-        <label>Notes</label>
+            <div class="form-group">
 
-        <textarea
-            id="notes"
-            rows="5"></textarea>
+                <label>
+                    Contact Name
+                </label>
 
+                <input
+                    id="contactName"
+                    placeholder="John Smith">
 
-        <label>Google Drive</label>
-
-        <input
-            id="driveFolderUrl"
-            placeholder="Selected Drive file/folder URL">
-
-        <button
-            class="drive-button"
-            onclick="openDrivePicker()">
-
-            Connect Google Drive
-
-        </button>
+            </div>
 
 
-        <br><br>
+            <div class="form-group">
 
-        <button onclick="saveClient()">
-            Save Client
-        </button>
+                <label>
+                    Email
+                </label>
 
-        <button
-            onclick="closeModal()">
-            Cancel
-        </button>
+                <input
+                    type="email"
+                    id="clientEmail"
+                    placeholder="client@example.com">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Phone
+                </label>
+
+                <input
+                    id="clientPhone"
+                    placeholder="555-555-5555">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Service
+                </label>
+
+                <input
+                    id="service"
+                    placeholder="Bookkeeping">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Invoice Number
+                </label>
+
+                <input
+                    id="invoiceNumber"
+                    placeholder="INV-1001">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Invoice Amount
+                </label>
+
+                <input
+                    type="number"
+                    id="invoiceAmount"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Due Date
+                </label>
+
+                <input
+                    type="date"
+                    id="dueDate">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select id="clientStatus">
+
+                    <option>
+                        Under Review
+                    </option>
+
+                    <option>
+                        Pending
+                    </option>
+
+                    <option>
+                        Completed
+                    </option>
+
+                    <option>
+                        Archived
+                    </option>
+
+                    <option>
+                        Overdue
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group full">
+
+                <label>
+                    Notes
+                </label>
+
+                <textarea
+                    id="notes"
+                    rows="5"
+                    placeholder="Client notes...">
+                </textarea>
+
+            </div>
+
+
+            <div class="form-group full">
+
+                <label>
+                    Google Drive
+                </label>
+
+                <div class="drive-row">
+
+                    <input
+                        id="driveFolderUrl"
+                        placeholder="Drive file or folder URL">
+
+                    <button
+                        type="button"
+                        class="btn-success"
+                        onclick="openDrivePicker()">
+
+                        Select from Drive
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button
+                class="btn-primary"
+                onclick="saveClient()">
+
+                Save Client
+
+            </button>
+
+            <button
+                class="btn-secondary"
+                onclick="closeModal()">
+
+                Cancel
+
+            </button>
+
+        </div>
 
     </div>
 
@@ -457,9 +966,10 @@
 
 <script>
 
-/* ========================================
-   SUPABASE
-======================================== */
+/* =========================================================
+   CONFIGURATION
+   REPLACE THESE VALUES
+========================================================= */
 
 const SUPABASE_URL =
     "YOUR_SUPABASE_URL";
@@ -468,21 +978,6 @@ const SUPABASE_ANON_KEY =
     "YOUR_SUPABASE_ANON_KEY";
 
 
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
-
-
-let clients = [];
-let currentRole = null;
-
-
-/* ========================================
-   GOOGLE CONFIG
-======================================== */
-
 const GOOGLE_CLIENT_ID =
     "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
 
@@ -490,30 +985,69 @@ const GOOGLE_API_KEY =
     "YOUR_GOOGLE_API_KEY";
 
 const GOOGLE_APP_ID =
-    "YOUR_GOOGLE_CLOUD_PROJECT_NUMBER";
+    "YOUR_GOOGLE_PROJECT_NUMBER";
 
 
-let tokenClient;
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+let clients = [];
+
+let currentRole = null;
+
+let currentUser = null;
+
+let tokenClient = null;
+
 let accessToken = null;
 
 let pickerReady = false;
+
 let gisReady = false;
 
 
-/* ========================================
+/* =========================================================
    LOGIN
-======================================== */
+========================================================= */
 
 async function login() {
 
     const email =
-        document.getElementById("email").value;
+        document.getElementById("email").value.trim();
 
     const password =
         document.getElementById("password").value;
 
 
-    const { error } =
+    const message =
+        document.getElementById("loginMessage");
+
+
+    message.textContent = "";
+
+    message.className = "message";
+
+
+    if (!email || !password) {
+
+        message.textContent =
+            "Please enter your email and password.";
+
+        message.classList.add("error");
+
+        return;
+
+    }
+
+
+    const { data, error } =
         await supabaseClient.auth.signInWithPassword({
             email,
             password
@@ -522,33 +1056,46 @@ async function login() {
 
     if (error) {
 
-        document.getElementById(
-            "loginMessage"
-        ).innerText = error.message;
+        message.textContent =
+            error.message;
+
+        message.classList.add("error");
 
         return;
+
     }
+
+
+    currentUser = data.user;
 
     await initializeApp();
 
 }
 
 
-/* ========================================
-   INITIALIZE
-======================================== */
+/* =========================================================
+   INITIALIZE APPLICATION
+========================================================= */
 
 async function initializeApp() {
 
     const {
         data: { user }
-    } = await supabaseClient.auth.getUser();
+    } =
+        await supabaseClient.auth.getUser();
 
 
-    if (!user) return;
+    if (!user) {
+
+        return;
+
+    }
 
 
-    const { data: role } =
+    currentUser = user;
+
+
+    const { data: roleData, error } =
         await supabaseClient
         .from("user_roles")
         .select("role")
@@ -556,33 +1103,37 @@ async function initializeApp() {
         .single();
 
 
-    if (!role) {
+    if (error || !roleData) {
 
         alert(
-            "Your account has not been assigned a role."
+            "Your account does not have an assigned role. Contact the EFR Accounting Firm administrator."
         );
 
+        await supabaseClient.auth.signOut();
+
         return;
+
     }
 
 
-    currentRole = role.role;
+    currentRole = roleData.role;
 
 
-    document.getElementById(
-        "loginPage"
-    ).classList.add("hidden");
+    document
+        .getElementById("loginPage")
+        .classList.add("hidden");
 
 
-    document.getElementById(
-        "app"
-    ).classList.remove("hidden");
+    document
+        .getElementById("app")
+        .classList.remove("hidden");
 
 
-    document.getElementById(
-        "userRole"
-    ).innerText =
-        "Logged in as: " + currentRole;
+    document
+        .getElementById("userRole")
+        .textContent =
+            "Signed in as " +
+            currentRole.toUpperCase();
 
 
     await loadClients();
@@ -590,9 +1141,9 @@ async function initializeApp() {
 }
 
 
-/* ========================================
+/* =========================================================
    LOAD CLIENTS
-======================================== */
+========================================================= */
 
 async function loadClients() {
 
@@ -607,9 +1158,13 @@ async function loadClients() {
 
     if (error) {
 
-        alert(error.message);
+        alert(
+            "Unable to load clients: " +
+            error.message
+        );
 
         return;
+
     }
 
 
@@ -622,85 +1177,100 @@ async function loadClients() {
 }
 
 
-/* ========================================
-   DASHBOARD
-======================================== */
+/* =========================================================
+   DASHBOARD METRICS
+========================================================= */
 
 function updateDashboard() {
 
     document.getElementById(
         "totalClients"
-    ).innerText = clients.length;
+    ).textContent =
+        clients.length;
 
 
     document.getElementById(
         "reviewClients"
-    ).innerText =
+    ).textContent =
         clients.filter(
-            x => x.status === "Under Review"
+            client =>
+                client.status === "Under Review"
         ).length;
 
 
     document.getElementById(
         "pendingClients"
-    ).innerText =
+    ).textContent =
         clients.filter(
-            x => x.status === "Pending"
+            client =>
+                client.status === "Pending"
         ).length;
 
 
     document.getElementById(
         "completedClients"
-    ).innerText =
+    ).textContent =
         clients.filter(
-            x => x.status === "Completed"
+            client =>
+                client.status === "Completed"
         ).length;
 
 
     document.getElementById(
         "overdueClients"
-    ).innerText =
+    ).textContent =
         clients.filter(
-            x => x.status === "Overdue"
+            client =>
+                client.status === "Overdue"
         ).length;
 
 
     const outstanding =
         clients
-        .filter(x => x.status !== "Completed")
-        .reduce(
-            (sum, x) =>
-                sum + Number(x.invoice_amount || 0),
-            0
-        );
+            .filter(
+                client =>
+                    client.status !== "Completed"
+            )
+            .reduce(
+                (total, client) =>
+                    total +
+                    Number(
+                        client.invoice_amount || 0
+                    ),
+                0
+            );
 
 
     document.getElementById(
         "outstanding"
-    ).innerText =
-        "$" + outstanding.toLocaleString(
-            undefined,
+    ).textContent =
+        "$" +
+        outstanding.toLocaleString(
+            "en-US",
             {
-                minimumFractionDigits: 2
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             }
         );
 
 }
 
 
-/* ========================================
+/* =========================================================
    CLIENT TABLE
-======================================== */
+========================================================= */
 
 function renderClients() {
 
     const search =
-        document.getElementById(
-            "search"
-        ).value.toLowerCase();
+        document
+            .getElementById("search")
+            .value
+            .toLowerCase()
+            .trim();
 
 
-    const status =
+    const selectedStatus =
         document.getElementById(
             "statusFilter"
         ).value;
@@ -709,17 +1279,33 @@ function renderClients() {
     const filtered =
         clients.filter(client => {
 
-            const text =
-                `${client.company_name}
-                ${client.contact_name}
-                ${client.service}
-                ${client.invoice_number}`
+            const searchableText =
+                [
+                    client.company_name,
+                    client.contact_name,
+                    client.email,
+                    client.phone,
+                    client.service,
+                    client.invoice_number,
+                    client.notes
+                ]
+                .filter(Boolean)
+                .join(" ")
                 .toLowerCase();
 
 
+            const matchesSearch =
+                searchableText.includes(search);
+
+
+            const matchesStatus =
+                !selectedStatus ||
+                client.status === selectedStatus;
+
+
             return (
-                text.includes(search) &&
-                (!status || client.status === status)
+                matchesSearch &&
+                matchesStatus
             );
 
         });
@@ -734,6 +1320,25 @@ function renderClients() {
     table.innerHTML = "";
 
 
+    if (filtered.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td
+                    colspan="9"
+                    class="empty-state">
+
+                    No clients found.
+
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
     filtered.forEach(client => {
 
         const row =
@@ -741,79 +1346,156 @@ function renderClients() {
 
 
         const statusClass =
-            client.status
-            .toLowerCase()
-            .replaceAll(" ", "-");
+            getStatusClass(
+                client.status
+            );
 
 
         row.innerHTML = `
 
             <td>
+
                 <strong>
-                    ${escapeHtml(client.company_name)}
+                    ${escapeHtml(
+                        client.company_name || ""
+                    )}
                 </strong>
+
+                ${
+                    client.notes
+                        ?
+                        `<br>
+                         <small>
+                            ${escapeHtml(
+                                client.notes
+                            )}
+                         </small>`
+                        :
+                        ""
+                }
+
             </td>
 
-            <td>
-                ${escapeHtml(client.contact_name || "")}
-                <br>
-                ${escapeHtml(client.email || "")}
-            </td>
 
             <td>
-                ${escapeHtml(client.service || "")}
+
+                ${escapeHtml(
+                    client.contact_name || ""
+                )}
+
+                ${
+                    client.email
+                        ?
+                        `<br>
+                         <small>
+                            ${escapeHtml(
+                                client.email
+                            )}
+                         </small>`
+                        :
+                        ""
+                }
+
             </td>
 
+
             <td>
-                ${escapeHtml(client.invoice_number || "")}
+                ${escapeHtml(
+                    client.service || ""
+                )}
             </td>
+
+
+            <td>
+                ${escapeHtml(
+                    client.invoice_number || ""
+                )}
+            </td>
+
 
             <td>
                 $${Number(
                     client.invoice_amount || 0
-                ).toFixed(2)}
+                ).toLocaleString(
+                    "en-US",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                )}
             </td>
 
-            <td>
-                ${client.due_date || ""}
-            </td>
 
             <td>
-                <span class="status ${statusClass}">
-                    ${client.status}
+                ${escapeHtml(
+                    formatDate(
+                        client.due_date
+                    )
+                )}
+            </td>
+
+
+            <td>
+
+                <span
+                    class="status ${statusClass}">
+
+                    ${escapeHtml(
+                        client.status
+                    )}
+
                 </span>
+
             </td>
+
 
             <td>
 
                 ${
                     client.drive_folder_url
                     ?
-                    `<a
-                        href="${escapeAttribute(client.drive_folder_url)}"
-                        target="_blank">
+                    `
+                    <a
+                        href="${escapeAttribute(
+                            client.drive_folder_url
+                        )}"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
                         Open Drive
-                    </a>`
+
+                    </a>
+                    `
                     :
-                    "Not connected"
+                    `<span style="color:#9ca3af;">
+                        Not connected
+                     </span>`
                 }
 
             </td>
 
+
             <td>
 
                 <button
+                    class="btn-primary"
                     onclick="editClient('${client.id}')">
+
                     Edit
+
                 </button>
+
 
                 ${
                     currentRole === "admin"
                     ?
                     `
                     <button
+                        class="btn-danger"
                         onclick="deleteClient('${client.id}')">
+
                         Delete
+
                     </button>
                     `
                     :
@@ -832,15 +1514,71 @@ function renderClients() {
 }
 
 
-/* ========================================
-   NEW CLIENT
-======================================== */
+/* =========================================================
+   STATUS CLASS
+========================================================= */
+
+function getStatusClass(status) {
+
+    switch (status) {
+
+        case "Under Review":
+            return "status-under-review";
+
+        case "Pending":
+            return "status-pending";
+
+        case "Completed":
+            return "status-completed";
+
+        case "Archived":
+            return "status-archived";
+
+        case "Overdue":
+            return "status-overdue";
+
+        default:
+            return "";
+
+    }
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatDate(dateString) {
+
+    if (!dateString) {
+        return "";
+    }
+
+
+    const date =
+        new Date(
+            dateString + "T00:00:00"
+        );
+
+
+    return date.toLocaleDateString(
+        "en-US"
+    );
+
+}
+
+
+/* =========================================================
+   OPEN NEW CLIENT
+========================================================= */
 
 function openNewClient() {
 
     document.getElementById(
         "modalTitle"
-    ).innerText = "Add Client";
+    ).textContent =
+        "Add Client";
 
 
     document.getElementById(
@@ -858,55 +1596,98 @@ function openNewClient() {
 }
 
 
+/* =========================================================
+   CLEAR CLIENT FORM
+========================================================= */
+
 function clearForm() {
 
-    [
-        "companyName",
-        "contactName",
-        "clientEmail",
-        "clientPhone",
-        "service",
-        "invoiceNumber",
-        "invoiceAmount",
-        "dueDate",
-        "notes",
-        "driveFolderUrl"
+    document.getElementById(
+        "companyName"
+    ).value = "";
 
-    ].forEach(id => {
 
-        document.getElementById(id).value = "";
+    document.getElementById(
+        "contactName"
+    ).value = "";
 
-    });
+
+    document.getElementById(
+        "clientEmail"
+    ).value = "";
+
+
+    document.getElementById(
+        "clientPhone"
+    ).value = "";
+
+
+    document.getElementById(
+        "service"
+    ).value = "";
+
+
+    document.getElementById(
+        "invoiceNumber"
+    ).value = "";
+
+
+    document.getElementById(
+        "invoiceAmount"
+    ).value = "";
+
+
+    document.getElementById(
+        "dueDate"
+    ).value = "";
 
 
     document.getElementById(
         "clientStatus"
-    ).value = "Under Review";
+    ).value =
+        "Under Review";
+
+
+    document.getElementById(
+        "notes"
+    ).value = "";
+
+
+    document.getElementById(
+        "driveFolderUrl"
+    ).value = "";
 
 }
 
 
-/* ========================================
+/* =========================================================
    EDIT CLIENT
-======================================== */
+========================================================= */
 
 function editClient(id) {
 
     const client =
-        clients.find(x => x.id === id);
+        clients.find(
+            item =>
+                item.id === id
+        );
 
 
-    if (!client) return;
+    if (!client) {
+        return;
+    }
 
 
     document.getElementById(
         "modalTitle"
-    ).innerText = "Edit Client";
+    ).textContent =
+        "Edit Client";
 
 
     document.getElementById(
         "clientId"
-    ).value = client.id;
+    ).value =
+        client.id;
 
 
     document.getElementById(
@@ -948,7 +1729,7 @@ function editClient(id) {
     document.getElementById(
         "invoiceAmount"
     ).value =
-        client.invoice_amount || 0;
+        client.invoice_amount || "";
 
 
     document.getElementById(
@@ -960,7 +1741,7 @@ function editClient(id) {
     document.getElementById(
         "clientStatus"
     ).value =
-        client.status;
+        client.status || "Under Review";
 
 
     document.getElementById(
@@ -982,16 +1763,38 @@ function editClient(id) {
 }
 
 
-/* ========================================
+/* =========================================================
    SAVE CLIENT
-======================================== */
+========================================================= */
 
 async function saveClient() {
 
-    const {
-        data: { user }
-    } =
-        await supabaseClient.auth.getUser();
+    const companyName =
+        document.getElementById(
+            "companyName"
+        ).value.trim();
+
+
+    if (!companyName) {
+
+        alert(
+            "Company name is required."
+        );
+
+        return;
+
+    }
+
+
+    if (!currentUser) {
+
+        alert(
+            "Your session has expired. Please log in again."
+        );
+
+        return;
+
+    }
 
 
     const id =
@@ -1003,34 +1806,32 @@ async function saveClient() {
     const record = {
 
         company_name:
-            document.getElementById(
-                "companyName"
-            ).value,
+            companyName,
 
         contact_name:
             document.getElementById(
                 "contactName"
-            ).value,
+            ).value.trim(),
 
         email:
             document.getElementById(
                 "clientEmail"
-            ).value,
+            ).value.trim(),
 
         phone:
             document.getElementById(
                 "clientPhone"
-            ).value,
+            ).value.trim(),
 
         service:
             document.getElementById(
                 "service"
-            ).value,
+            ).value.trim(),
 
         invoice_number:
             document.getElementById(
                 "invoiceNumber"
-            ).value,
+            ).value.trim(),
 
         invoice_amount:
             Number(
@@ -1052,24 +1853,25 @@ async function saveClient() {
         notes:
             document.getElementById(
                 "notes"
-            ).value,
+            ).value.trim(),
 
         drive_folder_url:
             document.getElementById(
                 "driveFolderUrl"
-            ).value,
+            ).value.trim(),
 
-        updated_by: user.id
+        updated_by:
+            currentUser.id
 
     };
 
 
-    let result;
+    let response;
 
 
     if (id) {
 
-        result =
+        response =
             await supabaseClient
             .from("clients")
             .update(record)
@@ -1078,9 +1880,9 @@ async function saveClient() {
     } else {
 
         record.created_by =
-            user.id;
+            currentUser.id;
 
-        result =
+        response =
             await supabaseClient
             .from("clients")
             .insert(record);
@@ -1088,11 +1890,15 @@ async function saveClient() {
     }
 
 
-    if (result.error) {
+    if (response.error) {
 
-        alert(result.error.message);
+        alert(
+            "Unable to save client: " +
+            response.error.message
+        );
 
         return;
+
     }
 
 
@@ -1103,22 +1909,32 @@ async function saveClient() {
 }
 
 
-/* ========================================
+/* =========================================================
    DELETE CLIENT
-======================================== */
+========================================================= */
 
 async function deleteClient(id) {
 
-    if (
-        currentRole !== "admin"
-    ) return;
+    if (currentRole !== "admin") {
+
+        alert(
+            "Only administrators can delete clients."
+        );
+
+        return;
+
+    }
 
 
-    if (
-        !confirm(
-            "Delete this client?"
-        )
-    ) return;
+    const confirmed =
+        confirm(
+            "Are you sure you want to permanently delete this client?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
 
 
     const { error } =
@@ -1130,9 +1946,13 @@ async function deleteClient(id) {
 
     if (error) {
 
-        alert(error.message);
+        alert(
+            "Unable to delete client: " +
+            error.message
+        );
 
         return;
+
     }
 
 
@@ -1141,36 +1961,52 @@ async function deleteClient(id) {
 }
 
 
-/* ========================================
+/* =========================================================
    CLOSE MODAL
-======================================== */
+========================================================= */
 
 function closeModal() {
 
     document.getElementById(
         "clientModal"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
 }
 
 
-/* ========================================
-   GOOGLE PICKER
-======================================== */
+/* =========================================================
+   GOOGLE API
+========================================================= */
 
 function gapiLoaded() {
 
-    gapi.load(
-        "picker",
-        () => {
-            pickerReady = true;
-        }
-    );
+    if (
+        typeof gapi !== "undefined"
+    ) {
+
+        gapi.load(
+            "picker",
+            () => {
+                pickerReady = true;
+            }
+        );
+
+    }
 
 }
 
 
 function gisLoaded() {
+
+    if (
+        typeof google === "undefined"
+    ) {
+
+        return;
+
+    }
+
 
     tokenClient =
         google.accounts.oauth2.initTokenClient({
@@ -1181,7 +2017,7 @@ function gisLoaded() {
             scope:
                 "https://www.googleapis.com/auth/drive.readonly",
 
-            callback: ""
+            callback: function() {}
 
         });
 
@@ -1191,7 +2027,23 @@ function gisLoaded() {
 }
 
 
+/* =========================================================
+   GOOGLE DRIVE PICKER
+========================================================= */
+
 function openDrivePicker() {
+
+    if (!GOOGLE_CLIENT_ID ||
+        GOOGLE_CLIENT_ID.includes("YOUR_")) {
+
+        alert(
+            "Google Drive has not been configured yet. Add your Google Client ID, API Key, and Project Number to this file."
+        );
+
+        return;
+
+    }
+
 
     if (
         !pickerReady ||
@@ -1199,21 +2051,27 @@ function openDrivePicker() {
     ) {
 
         alert(
-            "Google Drive is still loading. Try again in a moment."
+            "Google Drive is still loading. Please try again."
         );
 
         return;
+
     }
 
 
     tokenClient.callback =
-        response => {
+        function(response) {
 
             if (response.error) {
 
                 console.error(response);
 
+                alert(
+                    "Google authorization failed."
+                );
+
                 return;
+
             }
 
 
@@ -1263,6 +2121,10 @@ function openDrivePicker() {
 }
 
 
+/* =========================================================
+   GOOGLE PICKER CALLBACK
+========================================================= */
+
 function pickerCallback(data) {
 
     if (
@@ -1270,36 +2132,65 @@ function pickerCallback(data) {
         google.picker.Action.PICKED
     ) {
 
-        const file =
+        const selectedFile =
+            data.docs &&
             data.docs[0];
+
+
+        if (!selectedFile) {
+            return;
+        }
 
 
         document.getElementById(
             "driveFolderUrl"
         ).value =
-            file.url;
+            selectedFile.url || "";
 
     }
 
 }
 
 
-/* ========================================
+/* =========================================================
    LOGOUT
-======================================== */
+========================================================= */
 
 async function logout() {
 
     await supabaseClient.auth.signOut();
 
-    location.reload();
+    currentUser = null;
+
+    currentRole = null;
+
+    clients = [];
+
+    document
+        .getElementById("app")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("loginPage")
+        .classList.remove("hidden");
+
+
+    document.getElementById(
+        "email"
+    ).value = "";
+
+
+    document.getElementById(
+        "password"
+    ).value = "";
 
 }
 
 
-/* ========================================
-   XSS PROTECTION
-======================================== */
+/* =========================================================
+   SECURITY HELPERS
+========================================================= */
 
 function escapeHtml(value) {
 
@@ -1316,19 +2207,25 @@ function escapeHtml(value) {
 function escapeAttribute(value) {
 
     return String(value)
-        .replaceAll('"', "&quot;");
+        .replaceAll("&", "&amp;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
 
 }
 
 
-/* ========================================
-   AUTO LOGIN
-======================================== */
+/* =========================================================
+   SESSION CHECK
+========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-    async (event, session) => {
+    async function(event, session) {
 
-        if (session) {
+        if (
+            session &&
+            !currentUser
+        ) {
 
             await initializeApp();
 
