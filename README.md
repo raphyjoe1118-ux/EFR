@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<Accounting Solutions>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
