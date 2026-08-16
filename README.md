@@ -25,11 +25,6 @@
     </script>
 
     <style>
-
-        /* =====================================================
-           GLOBAL
-        ===================================================== */
-
         * {
             box-sizing: border-box;
         }
@@ -50,10 +45,9 @@
             display: none !important;
         }
 
-
-        /* =====================================================
-           LOGIN PAGE
-        ===================================================== */
+        /* =========================
+           LOGIN
+        ========================= */
 
         #loginPage {
             min-height: 100vh;
@@ -103,10 +97,9 @@
             margin-top: 8px;
         }
 
-
-        /* =====================================================
+        /* =========================
            HEADER
-        ===================================================== */
+        ========================= */
 
         .topbar {
             background: #163a5f;
@@ -159,21 +152,15 @@
             opacity: .9;
         }
 
-
-        /* =====================================================
-           CONTAINER
-        ===================================================== */
-
         .container {
             max-width: 1500px;
             margin: 0 auto;
             padding: 30px;
         }
 
-
-        /* =====================================================
+        /* =========================
            BUTTONS
-        ===================================================== */
+        ========================= */
 
         button {
             border: none;
@@ -213,10 +200,9 @@
             color: #1f2937;
         }
 
-
-        /* =====================================================
+        /* =========================
            DASHBOARD CARDS
-        ===================================================== */
+        ========================= */
 
         .cards {
             display: grid;
@@ -248,10 +234,9 @@
             color: #163a5f;
         }
 
-
-        /* =====================================================
+        /* =========================
            TOOLBAR
-        ===================================================== */
+        ========================= */
 
         .toolbar {
             background: white;
@@ -270,46 +255,31 @@
             margin: 0;
         }
 
-
-        /* =====================================================
-           CLIENT TABLE CONTAINER
-           EXPANDED SCROLL AREA
-        ===================================================== */
+        /* =========================
+           CLIENT TABLE
+        ========================= */
 
         .table-container {
             background: white;
             border-radius: 12px;
 
-            /* Horizontal scroll for smaller screens */
             overflow-x: auto;
-
-            /* Vertical client scrolling */
             overflow-y: auto;
 
-            /*
-                Increased height so more clients
-                are visible before needing to scroll.
-            */
+            /* Larger client area */
             max-height: 65vh;
             min-height: 450px;
 
             box-shadow: 0 2px 10px rgba(0,0,0,.05);
         }
 
-
-        /* Keep table header visible while scrolling */
-
+        /* Sticky header while scrolling */
         .table-container thead th {
             position: sticky;
             top: 0;
             z-index: 5;
             background: #1f2937;
         }
-
-
-        /* =====================================================
-           TABLE
-        ===================================================== */
 
         table {
             width: 100%;
@@ -339,10 +309,9 @@
             background: #f9fafb;
         }
 
-
-        /* =====================================================
+        /* =========================
            STATUS
-        ===================================================== */
+        ========================= */
 
         .status {
             display: inline-block;
@@ -378,10 +347,9 @@
             color: #991b1b;
         }
 
-
-        /* =====================================================
+        /* =========================
            FORMS
-        ===================================================== */
+        ========================= */
 
         input,
         select,
@@ -415,10 +383,9 @@
             grid-column: 1 / -1;
         }
 
-
-        /* =====================================================
+        /* =========================
            MODAL
-        ===================================================== */
+        ========================= */
 
         .modal {
             display: none;
@@ -468,10 +435,9 @@
             flex: 1;
         }
 
-
-        /* =====================================================
+        /* =========================
            MESSAGES
-        ===================================================== */
+        ========================= */
 
         .message {
             margin-top: 15px;
@@ -505,10 +471,9 @@
             text-decoration: underline;
         }
 
-
-        /* =====================================================
+        /* =========================
            MOBILE
-        ===================================================== */
+        ========================= */
 
         @media (max-width: 700px) {
 
@@ -543,21 +508,15 @@
                 flex-direction: column;
             }
 
-            /*
-                Give mobile users plenty of scrolling space too.
-            */
             .table-container {
                 max-height: 70vh;
                 min-height: 400px;
             }
-
         }
-
     </style>
 </head>
 
 <body>
-
 
 <!-- ==========================================================
      LOGIN
@@ -573,22 +532,15 @@
                 EFR
             </div>
 
-            <h1>
-                EFR Accounting Firm
-            </h1>
+            <h1>EFR Accounting Firm</h1>
 
-            <p>
-                Client Management Portal
-            </p>
+            <p>Client Management Portal</p>
 
         </div>
 
-
         <div class="form-group">
 
-            <label for="email">
-                Email
-            </label>
+            <label for="email">Email</label>
 
             <input
                 type="email"
@@ -598,12 +550,9 @@
 
         </div>
 
-
         <div class="form-group">
 
-            <label for="password">
-                Password
-            </label>
+            <label for="password">Password</label>
 
             <input
                 type="password"
@@ -613,7 +562,6 @@
 
         </div>
 
-
         <button
             class="btn-primary"
             style="width:100%;"
@@ -622,7 +570,6 @@
             Sign In
 
         </button>
-
 
         <div
             id="loginMessage"
@@ -634,15 +581,11 @@
 </div>
 
 
-
 <!-- ==========================================================
      MAIN APPLICATION
 =========================================================== -->
 
 <div id="app" class="hidden">
-
-
-    <!-- HEADER -->
 
     <header class="topbar">
 
@@ -654,9 +597,7 @@
 
             <div>
 
-                <h2>
-                    EFR Accounting Firm
-                </h2>
+                <h2>EFR Accounting Firm</h2>
 
                 <small>
                     Client Accounting Dashboard
@@ -666,14 +607,12 @@
 
         </div>
 
-
         <div class="topbar-right">
 
             <span
                 class="user-role"
                 id="userRole">
             </span>
-
 
             <button
                 class="btn-danger"
@@ -688,110 +627,48 @@
     </header>
 
 
-
     <main class="container">
 
-
-        <!-- ==================================================
-             DASHBOARD CARDS
-        =================================================== -->
+        <!-- DASHBOARD CARDS -->
 
         <section class="cards">
 
-
             <div class="card">
-
-                <h4>
-                    Total Clients
-                </h4>
-
-                <h2
-                    id="totalClients">
-                    0
-                </h2>
-
+                <h4>Total Clients</h4>
+                <h2 id="totalClients">0</h2>
             </div>
 
-
             <div class="card">
-
-                <h4>
-                    Under Review
-                </h4>
-
-                <h2
-                    id="reviewClients">
-                    0
-                </h2>
-
+                <h4>Under Review</h4>
+                <h2 id="reviewClients">0</h2>
             </div>
 
-
             <div class="card">
-
-                <h4>
-                    Pending
-                </h4>
-
-                <h2
-                    id="pendingClients">
-                    0
-                </h2>
-
+                <h4>Pending</h4>
+                <h2 id="pendingClients">0</h2>
             </div>
 
-
             <div class="card">
-
-                <h4>
-                    Completed
-                </h4>
-
-                <h2
-                    id="completedClients">
-                    0
-                </h2>
-
+                <h4>Completed</h4>
+                <h2 id="completedClients">0</h2>
             </div>
 
-
             <div class="card">
-
-                <h4>
-                    Overdue
-                </h4>
-
-                <h2
-                    id="overdueClients">
-                    0
-                </h2>
-
+                <h4>Overdue</h4>
+                <h2 id="overdueClients">0</h2>
             </div>
 
-
             <div class="card">
-
-                <h4>
-                    Outstanding
-                </h4>
-
-                <h2
-                    id="outstanding">
-                    $0.00
-                </h2>
-
+                <h4>Outstanding</h4>
+                <h2 id="outstanding">$0.00</h2>
             </div>
 
         </section>
 
 
-
-        <!-- ==================================================
-             TOOLBAR
-        =================================================== -->
+        <!-- SEARCH / FILTER -->
 
         <section class="toolbar">
-
 
             <button
                 class="btn-primary"
@@ -801,13 +678,11 @@
 
             </button>
 
-
             <input
                 type="search"
                 id="search"
                 placeholder="Search clients..."
                 oninput="renderClients()">
-
 
             <select
                 id="statusFilter"
@@ -817,35 +692,18 @@
                     All Statuses
                 </option>
 
-                <option>
-                    Under Review
-                </option>
-
-                <option>
-                    Pending
-                </option>
-
-                <option>
-                    Completed
-                </option>
-
-                <option>
-                    Archived
-                </option>
-
-                <option>
-                    Overdue
-                </option>
+                <option>Under Review</option>
+                <option>Pending</option>
+                <option>Completed</option>
+                <option>Archived</option>
+                <option>Overdue</option>
 
             </select>
 
         </section>
 
 
-
-        <!-- ==================================================
-             CLIENT TABLE
-        =================================================== -->
+        <!-- CLIENT TABLE -->
 
         <section class="table-container">
 
@@ -854,51 +712,20 @@
                 <thead>
 
                     <tr>
-
-                        <th>
-                            Client
-                        </th>
-
-                        <th>
-                            Contact
-                        </th>
-
-                        <th>
-                            Service
-                        </th>
-
-                        <th>
-                            Invoice
-                        </th>
-
-                        <th>
-                            Amount
-                        </th>
-
-                        <th>
-                            Due Date
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                        <th>
-                            Google Drive
-                        </th>
-
-                        <th>
-                            Actions
-                        </th>
-
+                        <th>Client</th>
+                        <th>Contact</th>
+                        <th>Service</th>
+                        <th>Invoice</th>
+                        <th>Amount</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Google Drive</th>
+                        <th>Actions</th>
                     </tr>
 
                 </thead>
 
-
-                <tbody
-                    id="clientTable">
-                </tbody>
+                <tbody id="clientTable"></tbody>
 
             </table>
 
@@ -909,7 +736,6 @@
 </div>
 
 
-
 <!-- ==========================================================
      CLIENT MODAL
 =========================================================== -->
@@ -918,17 +744,13 @@
     id="clientModal"
     class="modal">
 
-
     <div class="modal-content">
-
 
         <div class="modal-header">
 
-            <h2
-                id="modalTitle">
+            <h2 id="modalTitle">
                 Add Client
             </h2>
-
 
             <button
                 class="btn-light"
@@ -940,7 +762,6 @@
 
         </div>
 
-
         <input
             type="hidden"
             id="clientId">
@@ -948,12 +769,9 @@
 
         <div class="form-grid">
 
-
             <div class="form-group">
 
-                <label>
-                    Company Name *
-                </label>
+                <label>Company Name *</label>
 
                 <input
                     id="companyName"
@@ -964,9 +782,7 @@
 
             <div class="form-group">
 
-                <label>
-                    Contact Name
-                </label>
+                <label>Contact Name</label>
 
                 <input
                     id="contactName"
@@ -977,9 +793,7 @@
 
             <div class="form-group">
 
-                <label>
-                    Email
-                </label>
+                <label>Email</label>
 
                 <input
                     type="email"
@@ -991,9 +805,7 @@
 
             <div class="form-group">
 
-                <label>
-                    Phone
-                </label>
+                <label>Phone</label>
 
                 <input
                     id="clientPhone"
@@ -1004,9 +816,7 @@
 
             <div class="form-group">
 
-                <label>
-                    Service
-                </label>
+                <label>Service</label>
 
                 <input
                     id="service"
@@ -1017,9 +827,7 @@
 
             <div class="form-group">
 
-                <label>
-                    Invoice Number
-                </label>
+                <label>Invoice Number</label>
 
                 <input
                     id="invoiceNumber"
@@ -1030,9 +838,7 @@
 
             <div class="form-group">
 
-                <label>
-                    Invoice Amount
-                </label>
+                <label>Invoice Amount</label>
 
                 <input
                     type="number"
@@ -1046,9 +852,7 @@
 
             <div class="form-group">
 
-                <label>
-                    Due Date
-                </label>
+                <label>Due Date</label>
 
                 <input
                     type="date"
@@ -1059,32 +863,15 @@
 
             <div class="form-group">
 
-                <label>
-                    Status
-                </label>
+                <label>Status</label>
 
-                <select
-                    id="clientStatus">
+                <select id="clientStatus">
 
-                    <option>
-                        Under Review
-                    </option>
-
-                    <option>
-                        Pending
-                    </option>
-
-                    <option>
-                        Completed
-                    </option>
-
-                    <option>
-                        Archived
-                    </option>
-
-                    <option>
-                        Overdue
-                    </option>
+                    <option>Under Review</option>
+                    <option>Pending</option>
+                    <option>Completed</option>
+                    <option>Archived</option>
+                    <option>Overdue</option>
 
                 </select>
 
@@ -1093,9 +880,7 @@
 
             <div class="form-group full">
 
-                <label>
-                    Notes
-                </label>
+                <label>Notes</label>
 
                 <textarea
                     id="notes"
@@ -1108,17 +893,13 @@
 
             <div class="form-group full">
 
-                <label>
-                    Google Drive
-                </label>
-
+                <label>Google Drive</label>
 
                 <div class="drive-row">
 
                     <input
                         id="driveFolderUrl"
                         placeholder="Drive file or folder URL">
-
 
                     <button
                         type="button"
@@ -1131,17 +912,13 @@
 
                 </div>
 
-
                 <small class="muted">
-
                     Connect the client's Google Drive file or folder.
-
                 </small>
 
             </div>
 
         </div>
-
 
 
         <div class="modal-footer">
@@ -1153,7 +930,6 @@
                 Save Client
 
             </button>
-
 
             <button
                 class="btn-secondary"
@@ -1170,42 +946,37 @@
 </div>
 
 
-
 <script>
-
 
 /* ==========================================================
    SUPABASE CONFIGURATION
-=========================================================== */
+========================================================== */
 
 const SUPABASE_URL =
     "https://ujsnwtbdoumtqnnvopti.supabase.co";
 
-
 const SUPABASE_ANON_KEY =
-    "sb_publishable_lXhvukwKVSEuQC0UlBPuLg_KNWRxfpW";
+    "sb_publishable_lXhvukKVSEuQC0UlBPuLg_KNWRxfpW";
 
 
 /* ==========================================================
    GOOGLE CONFIGURATION
-   Replace these when Google Drive is configured.
-=========================================================== */
+   Still needs Google Cloud values.
+========================================================== */
 
 const GOOGLE_CLIENT_ID =
     "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
 
-
 const GOOGLE_API_KEY =
     "YOUR_GOOGLE_API_KEY";
-
 
 const GOOGLE_APP_ID =
     "YOUR_GOOGLE_PROJECT_NUMBER";
 
 
 /* ==========================================================
-   SUPABASE
-=========================================================== */
+   SUPABASE CLIENT
+========================================================== */
 
 const supabaseClient =
     supabase.createClient(
@@ -1216,26 +987,21 @@ const supabaseClient =
 
 /* ==========================================================
    APPLICATION STATE
-=========================================================== */
+========================================================== */
 
 let clients = [];
-
 let currentUser = null;
-
 let currentRole = null;
 
 let tokenClient = null;
-
 let accessToken = null;
-
 let pickerReady = false;
-
 let gisReady = false;
 
 
 /* ==========================================================
    LOGIN
-=========================================================== */
+========================================================== */
 
 async function login() {
 
@@ -1245,21 +1011,17 @@ async function login() {
             .value
             .trim();
 
-
     const password =
         document
             .getElementById("password")
             .value;
-
 
     const message =
         document.getElementById(
             "loginMessage"
         );
 
-
     message.textContent = "";
-
     message.className = "message";
 
 
@@ -1274,16 +1036,10 @@ async function login() {
     }
 
 
-    const {
-        data,
-        error
-    } =
+    const { data, error } =
         await supabaseClient.auth.signInWithPassword({
-
             email,
-
             password
-
         });
 
 
@@ -1299,9 +1055,7 @@ async function login() {
     }
 
 
-    currentUser =
-        data.user;
-
+    currentUser = data.user;
 
     await initializeApp();
 
@@ -1309,28 +1063,23 @@ async function login() {
 
 
 /* ==========================================================
-   INITIALIZE APP
-=========================================================== */
+   INITIALIZE APPLICATION
+========================================================== */
 
 async function initializeApp() {
 
     const {
-        data: {
-            user
-        }
+        data: { user }
     } =
         await supabaseClient.auth.getUser();
 
 
     if (!user) {
-
         return;
-
     }
 
 
-    currentUser =
-        user;
+    currentUser = user;
 
 
     const {
@@ -1338,38 +1087,40 @@ async function initializeApp() {
         error
     } =
         await supabaseClient
-
             .from("user_roles")
-
             .select("role")
-
-            .eq(
-                "user_id",
-                user.id
-            )
-
+            .eq("user_id", user.id)
             .single();
 
 
-    if (
-        error ||
-        !roleData
-    ) {
+    if (error || !roleData) {
 
         alert(
             "This account does not have an EFR Accounting Firm role assigned."
         );
 
-
         await supabaseClient.auth.signOut();
 
         return;
-
     }
 
 
     currentRole =
-        roleData.role;
+        String(roleData.role).toLowerCase();
+
+
+    /*
+       Supported roles:
+       admin
+       client
+
+       An old "staff" role is converted visually to Client
+       for compatibility with an older database.
+    */
+
+    if (currentRole === "staff") {
+        currentRole = "client";
+    }
 
 
     document
@@ -1396,7 +1147,7 @@ async function initializeApp() {
 
 /* ==========================================================
    LOAD CLIENTS
-=========================================================== */
+========================================================== */
 
 async function loadClients() {
 
@@ -1405,11 +1156,8 @@ async function loadClients() {
         error
     } =
         await supabaseClient
-
             .from("clients")
-
             .select("*")
-
             .order(
                 "created_at",
                 {
@@ -1426,16 +1174,12 @@ async function loadClients() {
         );
 
         return;
-
     }
 
 
-    clients =
-        data || [];
-
+    clients = data || [];
 
     updateDashboard();
-
     renderClients();
 
 }
@@ -1443,7 +1187,7 @@ async function loadClients() {
 
 /* ==========================================================
    DASHBOARD METRICS
-=========================================================== */
+========================================================== */
 
 function updateDashboard() {
 
@@ -1495,24 +1239,17 @@ function updateDashboard() {
 
     const outstanding =
         clients
-
             .filter(
                 client =>
                     client.status !==
                     "Completed"
             )
-
             .reduce(
-                (
-                    total,
-                    client
-                ) =>
+                (total, client) =>
                     total +
                     Number(
-                        client.invoice_amount ||
-                        0
+                        client.invoice_amount || 0
                     ),
-
                 0
             );
 
@@ -1534,7 +1271,7 @@ function updateDashboard() {
 
 /* ==========================================================
    RENDER CLIENTS
-=========================================================== */
+========================================================== */
 
 function renderClients() {
 
@@ -1548,57 +1285,37 @@ function renderClients() {
 
     const selectedStatus =
         document
-            .getElementById(
-                "statusFilter"
-            )
+            .getElementById("statusFilter")
             .value;
 
 
     const filtered =
-        clients.filter(
-            client => {
+        clients.filter(client => {
 
-                const searchableText = [
-
+            const searchableText =
+                [
                     client.company_name,
-
                     client.contact_name,
-
                     client.email,
-
                     client.phone,
-
                     client.service,
-
                     client.invoice_number,
-
                     client.notes
-
                 ]
                 .filter(Boolean)
                 .join(" ")
                 .toLowerCase();
 
 
-                const matchesSearch =
-                    searchableText.includes(
-                        search
-                    );
-
-
-                const matchesStatus =
+            return (
+                searchableText.includes(search) &&
+                (
                     !selectedStatus ||
-                    client.status ===
-                    selectedStatus;
+                    client.status === selectedStatus
+                )
+            );
 
-
-                return (
-                    matchesSearch &&
-                    matchesStatus
-                );
-
-            }
-        );
+        });
 
 
     const table =
@@ -1610,14 +1327,10 @@ function renderClients() {
     table.innerHTML = "";
 
 
-    if (
-        filtered.length === 0
-    ) {
+    if (filtered.length === 0) {
 
         table.innerHTML = `
-
             <tr>
-
                 <td
                     colspan="9"
                     class="empty-state">
@@ -1625,256 +1338,184 @@ function renderClients() {
                     No clients found.
 
                 </td>
-
             </tr>
-
         `;
 
         return;
     }
 
 
-    filtered.forEach(
-        client => {
+    filtered.forEach(client => {
 
-            const row =
-                document.createElement(
-                    "tr"
-                );
+        const row =
+            document.createElement("tr");
 
 
-            const statusClass =
-                getStatusClass(
-                    client.status
-                );
-
-
-            row.innerHTML = `
-
-                <td>
-
-                    <strong>
-
-                        ${escapeHtml(
-                            client.company_name ||
-                            ""
-                        )}
-
-                    </strong>
-
-                </td>
-
-
-                <td>
-
-                    ${escapeHtml(
-                        client.contact_name ||
-                        ""
-                    )}
-
-                    ${
-                        client.email
-                        ?
-                        `
-                        <br>
-
-                        <small>
-
-                            ${escapeHtml(
-                                client.email
-                            )}
-
-                        </small>
-                        `
-                        :
-                        ""
-                    }
-
-                </td>
-
-
-                <td>
-
-                    ${escapeHtml(
-                        client.service ||
-                        ""
-                    )}
-
-                </td>
-
-
-                <td>
-
-                    ${escapeHtml(
-                        client.invoice_number ||
-                        ""
-                    )}
-
-                </td>
-
-
-                <td>
-
-                    $${Number(
-                        client.invoice_amount ||
-                        0
-                    ).toLocaleString(
-                        "en-US",
-                        {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        }
-                    )}
-
-                </td>
-
-
-                <td>
-
-                    ${escapeHtml(
-                        formatDate(
-                            client.due_date
-                        )
-                    )}
-
-                </td>
-
-
-                <td>
-
-                    <span
-                        class="status ${statusClass}">
-
-                        ${escapeHtml(
-                            client.status
-                        )}
-
-                    </span>
-
-                </td>
-
-
-                <td>
-
-                    ${
-                        client.drive_folder_url
-
-                        ?
-
-                        `
-                        <a
-                            href="${escapeAttribute(
-                                client.drive_folder_url
-                            )}"
-                            target="_blank"
-                            rel="noopener noreferrer">
-
-                            Open Drive
-
-                        </a>
-                        `
-
-                        :
-
-                        `
-                        <span class="muted">
-
-                            Not connected
-
-                        </span>
-                        `
-                    }
-
-                </td>
-
-
-                <td>
-
-                    <button
-                        class="btn-primary"
-                        onclick="editClient(
-                            '${client.id}'
-                        )">
-
-                        Edit
-
-                    </button>
-
-
-                    ${
-                        currentRole === "admin"
-
-                        ?
-
-                        `
-                        <button
-                            class="btn-danger"
-                            onclick="deleteClient(
-                                '${client.id}'
-                            )">
-
-                            Delete
-
-                        </button>
-                        `
-
-                        :
-
-                        ""
-                    }
-
-                </td>
-
-            `;
-
-
-            table.appendChild(
-                row
+        const statusClass =
+            getStatusClass(
+                client.status
             );
 
-        }
-    );
+
+        row.innerHTML = `
+
+            <td>
+                <strong>
+                    ${escapeHtml(
+                        client.company_name || ""
+                    )}
+                </strong>
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    client.contact_name || ""
+                )}
+
+                ${
+                    client.email
+                    ?
+                    `<br>
+                     <small>
+                        ${escapeHtml(
+                            client.email
+                        )}
+                     </small>`
+                    :
+                    ""
+                }
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    client.service || ""
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    client.invoice_number || ""
+                )}
+            </td>
+
+            <td>
+                $${Number(
+                    client.invoice_amount || 0
+                ).toLocaleString(
+                    "en-US",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    formatDate(
+                        client.due_date
+                    )
+                )}
+            </td>
+
+            <td>
+                <span
+                    class="status ${statusClass}">
+
+                    ${escapeHtml(
+                        client.status
+                    )}
+
+                </span>
+            </td>
+
+            <td>
+                ${
+                    client.drive_folder_url
+                    ?
+                    `
+                    <a
+                        href="${escapeAttribute(
+                            client.drive_folder_url
+                        )}"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
+                        Open Drive
+
+                    </a>
+                    `
+                    :
+                    `
+                    <span class="muted">
+                        Not connected
+                    </span>
+                    `
+                }
+            </td>
+
+            <td>
+
+                <button
+                    class="btn-primary"
+                    onclick="editClient('${client.id}')">
+
+                    Edit
+
+                </button>
+
+                ${
+                    currentRole === "admin"
+                    ?
+                    `
+                    <button
+                        class="btn-danger"
+                        onclick="deleteClient('${client.id}')">
+
+                        Delete
+
+                    </button>
+                    `
+                    :
+                    ""
+                }
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
 
 }
 
 
 /* ==========================================================
    STATUS CLASS
-=========================================================== */
+========================================================== */
 
-function getStatusClass(
-    status
-) {
+function getStatusClass(status) {
 
     switch (status) {
 
         case "Under Review":
-
             return "status-under-review";
 
-
         case "Pending":
-
             return "status-pending";
 
-
         case "Completed":
-
             return "status-completed";
 
-
         case "Archived":
-
             return "status-archived";
 
-
         case "Overdue":
-
             return "status-overdue";
 
-
         default:
-
             return "";
 
     }
@@ -1883,26 +1524,19 @@ function getStatusClass(
 
 
 /* ==========================================================
-   FORMAT DATE
-=========================================================== */
+   DATE FORMAT
+========================================================== */
 
-function formatDate(
-    dateString
-) {
+function formatDate(dateString) {
 
     if (!dateString) {
-
         return "";
-
     }
-
 
     const date =
         new Date(
-            dateString +
-            "T00:00:00"
+            dateString + "T00:00:00"
         );
-
 
     return date.toLocaleDateString(
         "en-US"
@@ -1913,7 +1547,7 @@ function formatDate(
 
 /* ==========================================================
    OPEN NEW CLIENT
-=========================================================== */
+========================================================== */
 
 function openNewClient() {
 
@@ -1941,7 +1575,7 @@ function openNewClient() {
 
 /* ==========================================================
    CLEAR FORM
-=========================================================== */
+========================================================== */
 
 function clearForm() {
 
@@ -1949,52 +1583,42 @@ function clearForm() {
         "companyName"
     ).value = "";
 
-
     document.getElementById(
         "contactName"
     ).value = "";
-
 
     document.getElementById(
         "clientEmail"
     ).value = "";
 
-
     document.getElementById(
         "clientPhone"
     ).value = "";
-
 
     document.getElementById(
         "service"
     ).value = "";
 
-
     document.getElementById(
         "invoiceNumber"
     ).value = "";
-
 
     document.getElementById(
         "invoiceAmount"
     ).value = "";
 
-
     document.getElementById(
         "dueDate"
     ).value = "";
-
 
     document.getElementById(
         "clientStatus"
     ).value =
         "Under Review";
 
-
     document.getElementById(
         "notes"
     ).value = "";
-
 
     document.getElementById(
         "driveFolderUrl"
@@ -2005,23 +1629,18 @@ function clearForm() {
 
 /* ==========================================================
    EDIT CLIENT
-=========================================================== */
+========================================================== */
 
-function editClient(
-    id
-) {
+function editClient(id) {
 
     const client =
         clients.find(
-            item =>
-                item.id === id
+            item => item.id === id
         );
 
 
     if (!client) {
-
         return;
-
     }
 
 
@@ -2040,78 +1659,67 @@ function editClient(
     document.getElementById(
         "companyName"
     ).value =
-        client.company_name ||
-        "";
+        client.company_name || "";
 
 
     document.getElementById(
         "contactName"
     ).value =
-        client.contact_name ||
-        "";
+        client.contact_name || "";
 
 
     document.getElementById(
         "clientEmail"
     ).value =
-        client.email ||
-        "";
+        client.email || "";
 
 
     document.getElementById(
         "clientPhone"
     ).value =
-        client.phone ||
-        "";
+        client.phone || "";
 
 
     document.getElementById(
         "service"
     ).value =
-        client.service ||
-        "";
+        client.service || "";
 
 
     document.getElementById(
         "invoiceNumber"
     ).value =
-        client.invoice_number ||
-        "";
+        client.invoice_number || "";
 
 
     document.getElementById(
         "invoiceAmount"
     ).value =
-        client.invoice_amount ||
-        "";
+        client.invoice_amount || "";
 
 
     document.getElementById(
         "dueDate"
     ).value =
-        client.due_date ||
-        "";
+        client.due_date || "";
 
 
     document.getElementById(
         "clientStatus"
     ).value =
-        client.status ||
-        "Under Review";
+        client.status || "Under Review";
 
 
     document.getElementById(
         "notes"
     ).value =
-        client.notes ||
-        "";
+        client.notes || "";
 
 
     document.getElementById(
         "driveFolderUrl"
     ).value =
-        client.drive_folder_url ||
-        "";
+        client.drive_folder_url || "";
 
 
     document.getElementById(
@@ -2124,26 +1732,23 @@ function editClient(
 
 /* ==========================================================
    SAVE CLIENT
-=========================================================== */
+========================================================== */
 
 async function saveClient() {
 
     if (!currentUser) {
 
         alert(
-            "Your login session has expired."
+            "Your login session has expired. Please log in again."
         );
 
         return;
-
     }
 
 
     const companyName =
         document
-            .getElementById(
-                "companyName"
-            )
+            .getElementById("companyName")
             .value
             .trim();
 
@@ -2155,7 +1760,6 @@ async function saveClient() {
         );
 
         return;
-
     }
 
 
@@ -2170,96 +1774,64 @@ async function saveClient() {
         company_name:
             companyName,
 
-
         contact_name:
             document
-                .getElementById(
-                    "contactName"
-                )
+                .getElementById("contactName")
                 .value
                 .trim(),
-
 
         email:
             document
-                .getElementById(
-                    "clientEmail"
-                )
+                .getElementById("clientEmail")
                 .value
                 .trim(),
-
 
         phone:
             document
-                .getElementById(
-                    "clientPhone"
-                )
+                .getElementById("clientPhone")
                 .value
                 .trim(),
-
 
         service:
             document
-                .getElementById(
-                    "service"
-                )
+                .getElementById("service")
                 .value
                 .trim(),
-
 
         invoice_number:
             document
-                .getElementById(
-                    "invoiceNumber"
-                )
+                .getElementById("invoiceNumber")
                 .value
                 .trim(),
-
 
         invoice_amount:
             Number(
                 document
-                    .getElementById(
-                        "invoiceAmount"
-                    )
+                    .getElementById("invoiceAmount")
                     .value || 0
             ),
 
-
         due_date:
             document
-                .getElementById(
-                    "dueDate"
-                )
-                .value ||
-            null,
-
+                .getElementById("dueDate")
+                .value || null,
 
         status:
             document
-                .getElementById(
-                    "clientStatus"
-                )
+                .getElementById("clientStatus")
                 .value,
-
 
         notes:
             document
-                .getElementById(
-                    "notes"
-                )
+                .getElementById("notes")
                 .value
                 .trim(),
-
 
         drive_folder_url:
             document
-                .getElementById(
-                    "driveFolderUrl"
-                )
+                .getElementById("driveFolderUrl")
                 .value
                 .trim(),
-
 
         updated_by:
             currentUser.id
@@ -2274,11 +1846,8 @@ async function saveClient() {
 
         response =
             await supabaseClient
-
                 .from("clients")
-
                 .update(record)
-
                 .eq(
                     "id",
                     clientId
@@ -2292,9 +1861,7 @@ async function saveClient() {
 
         response =
             await supabaseClient
-
                 .from("clients")
-
                 .insert(record);
 
     }
@@ -2308,7 +1875,6 @@ async function saveClient() {
         );
 
         return;
-
     }
 
 
@@ -2320,16 +1886,13 @@ async function saveClient() {
 
 
 /* ==========================================================
-   DELETE CLIENT
-=========================================================== */
+   DELETE CLIENT - ADMIN ONLY
+========================================================== */
 
-async function deleteClient(
-    id
-) {
+async function deleteClient(id) {
 
     if (
-        currentRole !==
-        "admin"
+        currentRole !== "admin"
     ) {
 
         alert(
@@ -2337,7 +1900,6 @@ async function deleteClient(
         );
 
         return;
-
     }
 
 
@@ -2348,19 +1910,13 @@ async function deleteClient(
     ) {
 
         return;
-
     }
 
 
-    const {
-        error
-    } =
+    const { error } =
         await supabaseClient
-
             .from("clients")
-
             .delete()
-
             .eq(
                 "id",
                 id
@@ -2375,7 +1931,6 @@ async function deleteClient(
         );
 
         return;
-
     }
 
 
@@ -2386,7 +1941,7 @@ async function deleteClient(
 
 /* ==========================================================
    CLOSE MODAL
-=========================================================== */
+========================================================== */
 
 function closeModal() {
 
@@ -2400,22 +1955,18 @@ function closeModal() {
 
 /* ==========================================================
    GOOGLE API
-=========================================================== */
+========================================================== */
 
 function gapiLoaded() {
 
     if (
-        typeof gapi !==
-        "undefined"
+        typeof gapi !== "undefined"
     ) {
 
         gapi.load(
             "picker",
             function() {
-
-                pickerReady =
-                    true;
-
+                pickerReady = true;
             }
         );
 
@@ -2427,47 +1978,40 @@ function gapiLoaded() {
 function gisLoaded() {
 
     if (
-        typeof google ===
-        "undefined"
+        typeof google === "undefined"
     ) {
-
         return;
-
     }
 
 
     tokenClient =
-        google.accounts.oauth2
-            .initTokenClient({
+        google.accounts.oauth2.initTokenClient({
 
-                client_id:
-                    GOOGLE_CLIENT_ID,
+            client_id:
+                GOOGLE_CLIENT_ID,
 
-                scope:
-                    "https://www.googleapis.com/auth/drive.readonly",
+            scope:
+                "https://www.googleapis.com/auth/drive.readonly",
 
-                callback:
-                    function() {}
+            callback:
+                function() {}
 
-            });
+        });
 
 
-    gisReady =
-        true;
+    gisReady = true;
 
 }
 
 
 /* ==========================================================
    GOOGLE DRIVE PICKER
-=========================================================== */
+========================================================== */
 
 function openDrivePicker() {
 
     if (
-        GOOGLE_CLIENT_ID.includes(
-            "YOUR_"
-        )
+        GOOGLE_CLIENT_ID.includes("YOUR_")
     ) {
 
         alert(
@@ -2475,7 +2019,6 @@ function openDrivePicker() {
         );
 
         return;
-
     }
 
 
@@ -2489,27 +2032,21 @@ function openDrivePicker() {
         );
 
         return;
-
     }
 
 
     tokenClient.callback =
         function(response) {
 
-            if (
-                response.error
-            ) {
+            if (response.error) {
 
-                console.error(
-                    response
-                );
+                console.error(response);
 
                 alert(
                     "Google authorization failed."
                 );
 
                 return;
-
             }
 
 
@@ -2525,52 +2062,39 @@ function openDrivePicker() {
 
             const picker =
                 new google.picker.PickerBuilder()
-
                     .setDeveloperKey(
                         GOOGLE_API_KEY
                     )
-
                     .setAppId(
                         GOOGLE_APP_ID
                     )
-
                     .setOAuthToken(
                         accessToken
                     )
-
-                    .addView(
-                        view
-                    )
-
+                    .addView(view)
                     .setCallback(
                         pickerCallback
                     )
-
                     .build();
 
 
-            picker.setVisible(
-                true
-            );
+            picker.setVisible(true);
 
         };
 
 
-    tokenClient
-        .requestAccessToken({
-            prompt: ""
-        });
+    tokenClient.requestAccessToken({
+        prompt: ""
+    });
 
 }
 
 
 /* ==========================================================
    GOOGLE PICKER CALLBACK
-=========================================================== */
+========================================================== */
 
-function pickerCallback(
-    data
-) {
+function pickerCallback(data) {
 
     if (
         data.action ===
@@ -2583,17 +2107,14 @@ function pickerCallback(
 
 
         if (!selectedFile) {
-
             return;
-
         }
 
 
         document.getElementById(
             "driveFolderUrl"
         ).value =
-            selectedFile.url ||
-            "";
+            selectedFile.url || "";
 
     }
 
@@ -2602,36 +2123,26 @@ function pickerCallback(
 
 /* ==========================================================
    LOGOUT
-=========================================================== */
+========================================================== */
 
 async function logout() {
 
-    await supabaseClient
-        .auth
-        .signOut();
+    await supabaseClient.auth.signOut();
 
 
     currentUser = null;
-
     currentRole = null;
-
     clients = [];
 
 
     document
-        .getElementById(
-            "app"
-        )
-        .classList
-        .add("hidden");
+        .getElementById("app")
+        .classList.add("hidden");
 
 
     document
-        .getElementById(
-            "loginPage"
-        )
-        .classList
-        .remove("hidden");
+        .getElementById("loginPage")
+        .classList.remove("hidden");
 
 
     document.getElementById(
@@ -2648,80 +2159,37 @@ async function logout() {
 
 /* ==========================================================
    SECURITY HELPERS
-=========================================================== */
+========================================================== */
 
-function escapeHtml(
-    value
-) {
+function escapeHtml(value) {
 
     return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
 }
 
 
-function escapeAttribute(
-    value
-) {
+function escapeAttribute(value) {
 
     return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        );
+        .replaceAll("&", "&amp;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
 
 }
 
 
 /* ==========================================================
    AUTO LOGIN
-=========================================================== */
+========================================================== */
 
 supabaseClient.auth.onAuthStateChange(
-    async function(
-        event,
-        session
-    ) {
+    async function(event, session) {
 
         if (
             session &&
