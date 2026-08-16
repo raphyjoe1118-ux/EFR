@@ -1,640 +1,587 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>EFR Accounting Firm | Client Dashboard</title>
-
-    <!-- =====================================================
-         SUPABASE
-    ====================================================== -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-    <!-- =====================================================
-         GOOGLE PICKER / GOOGLE IDENTITY
-    ====================================================== -->
-
-    <script
-        async
-        defer
-        src="https://apis.google.com/js/api.js"
-        onload="gapiLoaded()">
-    </script>
-
-    <script
-        async
-        defer
-        src="https://accounts.google.com/gsi/client"
-        onload="gisLoaded()">
-    </script>
-
-
-    <style>
-
-        /* =====================================================
-           GLOBAL
-        ====================================================== */
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100%;
-        }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f6f8;
-            color: #1f2937;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-
-        /* =====================================================
-           LOGIN
-        ====================================================== */
-
-        #loginPage {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: #eef2f7;
-        }
-
-        .login-box {
-            width: 100%;
-            max-width: 430px;
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,.10);
-        }
-
-        .login-logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo-circle {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            background: #163a5f;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 23px;
-            font-weight: bold;
-        }
-
-        .login-logo h1 {
-            margin: 0;
-            color: #163a5f;
-            font-size: 28px;
-        }
-
-        .login-logo p {
-            color: #6b7280;
-            margin-top: 8px;
-        }
-
-
-        /* =====================================================
-           HEADER
-        ====================================================== */
-
-        .topbar {
-            background: #163a5f;
-            color: #ffffff;
-            padding: 18px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,.12);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .brand-logo {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            background: #ffffff;
-            color: #163a5f;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-        }
-
-        .brand h2 {
-            margin: 0;
-            font-size: 21px;
-        }
-
-        .brand small {
-            display: block;
-            margin-top: 3px;
-            opacity: .85;
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .user-role {
-            font-size: 14px;
-            opacity: .9;
-        }
-
-
-        /* =====================================================
-           CONTAINER
-        ====================================================== */
-
-        .container {
-            max-width: 1500px;
-            margin: 0 auto;
-            padding: 30px;
-        }
-
-
-        /* =====================================================
-           BUTTONS
-        ====================================================== */
-
-        button {
-            border: none;
-            border-radius: 7px;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: .2s;
-        }
-
-        button:hover {
-            opacity: .9;
-        }
-
-        button:disabled {
-            opacity: .55;
-            cursor: not-allowed;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #dc2626;
-            color: white;
-        }
-
-        .btn-success {
-            background: #16a34a;
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #6b7280;
-            color: white;
-        }
-
-        .btn-light {
-            background: #e5e7eb;
-            color: #1f2937;
-        }
-
-
-        /* =====================================================
-           DASHBOARD CARDS
-        ====================================================== */
-
-        .cards {
-            display: grid;
-            grid-template-columns:
-                repeat(auto-fit, minmax(190px, 1fr));
-            gap: 18px;
-            margin-bottom: 25px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 22px;
-            box-shadow: 0 2px 10px rgba(0,0,0,.05);
-        }
-
-        .card h4 {
-            margin: 0 0 10px;
-            color: #6b7280;
-            font-size: 14px;
-            font-weight: normal;
-        }
-
-        .card h2 {
-            margin: 0;
-            font-size: 28px;
-            color: #163a5f;
-        }
-
-
-        /* =====================================================
-           TOOLBAR
-        ====================================================== */
-
-        .toolbar {
-            background: white;
-            padding: 18px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .toolbar input,
-        .toolbar select {
-            width: auto;
-            min-width: 220px;
-            margin: 0;
-        }
-
-
-        /* =====================================================
-           CLIENT TABLE
-           Larger scroll area + sticky headers
-        ====================================================== */
-
-        .table-container {
-            background: white;
-            border-radius: 12px;
-
-            overflow-x: auto;
-            overflow-y: auto;
-
-            max-height: 65vh;
-            min-height: 450px;
-
-            box-shadow: 0 2px 10px rgba(0,0,0,.05);
-        }
-
-        .table-container thead th {
-            position: sticky;
-            top: 0;
-            z-index: 5;
-            background: #1f2937;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 1200px;
-        }
-
-        th,
-        td {
-            padding: 13px 14px;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        th {
-            background: #1f2937;
-            color: white;
-            font-size: 13px;
-        }
-
-        td {
-            font-size: 14px;
-            background: white;
-        }
-
-        tbody tr:hover td {
-            background: #f9fafb;
-        }
-
-
-        /* =====================================================
-           STATUS
-        ====================================================== */
-
-        .status {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .status-under-review {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-pending {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .status-completed {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .status-archived {
-            background: #e5e7eb;
-            color: #374151;
-        }
-
-        .status-overdue {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-
-        /* =====================================================
-           FORMS
-        ====================================================== */
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 11px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 7px;
-            font: inherit;
-            background: white;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .form-grid .full {
-            grid-column: 1 / -1;
-        }
-
-
-        /* =====================================================
-           MODAL
-        ====================================================== */
-
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.50);
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 900px;
-            max-height: 92vh;
-            overflow-y: auto;
-            padding: 30px;
-            border-radius: 14px;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            margin: 0;
-            color: #163a5f;
-        }
-
-        .modal-footer {
-            margin-top: 20px;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-
-        /* =====================================================
-           DOCUMENTS
-        ====================================================== */
-
-        .documents-section {
-            border: 1px solid #e5e7eb;
-            background: #f9fafb;
-            border-radius: 10px;
-            padding: 16px;
-        }
-
-        .documents-toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .documents-list {
-            margin-top: 12px;
-        }
-
-        .document-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 11px 12px;
-            margin-bottom: 8px;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-        }
-
-        .document-info {
-            min-width: 0;
-            flex: 1;
-        }
-
-        .document-name {
-            font-weight: 600;
-            overflow-wrap: anywhere;
-        }
-
-        .document-meta {
-            margin-top: 4px;
-            color: #6b7280;
-            font-size: 12px;
-        }
-
-        .document-actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .document-link {
-            display: inline-block;
-            color: white;
-            background: #2563eb;
-            padding: 8px 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 13px;
-        }
-
-        .document-delete {
-            background: #dc2626;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-
-        .drive-status {
-            color: #6b7280;
-            font-size: 13px;
-            margin-top: 8px;
-        }
-
-
-        /* =====================================================
-           MESSAGES
-        ====================================================== */
-
-        .message {
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-        .error {
-            color: #dc2626;
-        }
-
-        .success {
-            color: #16a34a;
-        }
-
-        .muted {
-            color: #9ca3af;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 50px;
-            color: #6b7280;
-        }
-
-        a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-
-        /* =====================================================
-           MOBILE
-        ====================================================== */
-
-        @media (max-width: 700px) {
-
-            .topbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .topbar-right {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .container {
-                padding: 15px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-grid .full {
-                grid-column: auto;
-            }
-
-            .toolbar input,
-            .toolbar select {
-                width: 100%;
-            }
-
-            .table-container {
-                max-height: 70vh;
-                min-height: 400px;
-            }
-
-            .modal-content {
-                padding: 20px;
-            }
-
-            .document-item {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-        }
-
-    </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EFR Accounting Firm | Client Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script
+    async
+    defer
+    src="https://apis.google.com/js/api.js"
+    onload="gapiLoaded()">
+</script>
+
+<script
+    async
+    defer
+    src="https://accounts.google.com/gsi/client"
+    onload="gisLoaded()">
+</script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #1f2937;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginPage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #eef2f7;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 430px;
+    background: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.10);
+}
+
+.login-logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    background: #163a5f;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.login-logo h1 {
+    margin: 0;
+    color: #163a5f;
+    font-size: 28px;
+}
+
+.login-logo p {
+    color: #6b7280;
+    margin-top: 8px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.topbar {
+    background: #163a5f;
+    color: #fff;
+    padding: 18px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #fff;
+    color: #163a5f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.brand h2 {
+    margin: 0;
+    font-size: 21px;
+}
+
+.brand small {
+    display: block;
+    margin-top: 3px;
+    opacity: .85;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.user-role {
+    font-size: 14px;
+}
+
+/* =========================
+   GENERAL
+========================= */
+
+.container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+button {
+    border: none;
+    border-radius: 7px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    opacity: .9;
+}
+
+button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: #fff;
+}
+
+.btn-danger {
+    background: #dc2626;
+    color: #fff;
+}
+
+.btn-success {
+    background: #16a34a;
+    color: #fff;
+}
+
+.btn-secondary {
+    background: #6b7280;
+    color: #fff;
+}
+
+.btn-light {
+    background: #e5e7eb;
+    color: #1f2937;
+}
+
+/* =========================
+   DASHBOARD CARDS
+========================= */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+
+.card h4 {
+    margin: 0 0 10px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.card h2 {
+    margin: 0;
+    font-size: 28px;
+    color: #163a5f;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar {
+    background: #fff;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.toolbar input,
+.toolbar select {
+    width: auto;
+    min-width: 220px;
+}
+
+/* =========================
+   CLIENT TABLE
+========================= */
+
+.table-container {
+    background: #fff;
+    border-radius: 12px;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 65vh;
+    min-height: 450px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+
+.table-container thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: #1f2937;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1200px;
+}
+
+th,
+td {
+    padding: 13px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+th {
+    background: #1f2937;
+    color: #fff;
+    font-size: 13px;
+}
+
+td {
+    font-size: 14px;
+    background: #fff;
+}
+
+tbody tr:hover td {
+    background: #f9fafb;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.status-under-review {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-pending {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-archived {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.status-overdue {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* =========================
+   FORMS
+========================= */
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    font: inherit;
+    background: #fff;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.form-grid .full {
+    grid-column: 1 / -1;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.50);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    width: 100%;
+    max-width: 900px;
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 30px;
+    border-radius: 14px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #163a5f;
+}
+
+.modal-footer {
+    margin-top: 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* =========================
+   DOCUMENTS
+========================= */
+
+.documents-section {
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.documents-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.documents-list {
+    margin-top: 12px;
+}
+
+.document-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 12px;
+    margin-bottom: 8px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+.document-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.document-name {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.document-meta {
+    margin-top: 4px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.document-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.document-link {
+    display: inline-block;
+    color: #fff;
+    background: #2563eb;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.document-delete {
+    background: #dc2626;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+.drive-status {
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+.message {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.error {
+    color: #dc2626;
+}
+
+.success {
+    color: #16a34a;
+}
+
+.muted {
+    color: #9ca3af;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 50px;
+    color: #6b7280;
+}
+
+a {
+    color: #2563eb;
+}
+
+@media (max-width: 700px) {
+
+    .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .topbar-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid .full {
+        grid-column: auto;
+    }
+
+    .toolbar input,
+    .toolbar select {
+        width: 100%;
+    }
+
+    .table-container {
+        max-height: 70vh;
+        min-height: 400px;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .document-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+</style>
 </head>
-
 
 <body>
 
-
 <!-- =========================================================
-     LOGIN PAGE
+     LOGIN
 ========================================================= -->
 
 <div id="loginPage">
@@ -647,16 +594,11 @@
                 EFR
             </div>
 
-            <h1>
-                EFR Accounting Firm
-            </h1>
+            <h1>EFR Accounting Firm</h1>
 
-            <p>
-                Client Management Portal
-            </p>
+            <p>Client Management Portal</p>
 
         </div>
-
 
         <div class="form-group">
 
@@ -672,7 +614,6 @@
 
         </div>
 
-
         <div class="form-group">
 
             <label for="password">
@@ -687,7 +628,6 @@
 
         </div>
 
-
         <button
             class="btn-primary"
             style="width:100%;"
@@ -697,26 +637,18 @@
 
         </button>
 
-
-        <div
-            id="loginMessage"
-            class="message">
-        </div>
+        <div id="loginMessage" class="message"></div>
 
     </div>
 
 </div>
 
 
-
 <!-- =========================================================
      APPLICATION
 ========================================================= -->
 
-<div
-    id="app"
-    class="hidden">
-
+<div id="app" class="hidden">
 
     <header class="topbar">
 
@@ -726,12 +658,9 @@
                 EFR
             </div>
 
-
             <div>
 
-                <h2>
-                    EFR Accounting Firm
-                </h2>
+                <h2>EFR Accounting Firm</h2>
 
                 <small>
                     Client Accounting Dashboard
@@ -741,14 +670,12 @@
 
         </div>
 
-
         <div class="topbar-right">
 
             <span
                 class="user-role"
                 id="userRole">
             </span>
-
 
             <button
                 class="btn-danger"
@@ -763,9 +690,7 @@
     </header>
 
 
-
     <main class="container">
-
 
         <!-- DASHBOARD -->
 
@@ -804,8 +729,7 @@
         </section>
 
 
-
-        <!-- SEARCH/FILTER -->
+        <!-- SEARCH -->
 
         <section class="toolbar">
 
@@ -817,13 +741,11 @@
 
             </button>
 
-
             <input
                 type="search"
                 id="search"
                 placeholder="Search clients..."
                 oninput="renderClients()">
-
 
             <select
                 id="statusFilter"
@@ -833,30 +755,15 @@
                     All Statuses
                 </option>
 
-                <option>
-                    Under Review
-                </option>
-
-                <option>
-                    Pending
-                </option>
-
-                <option>
-                    Completed
-                </option>
-
-                <option>
-                    Archived
-                </option>
-
-                <option>
-                    Overdue
-                </option>
+                <option>Under Review</option>
+                <option>Pending</option>
+                <option>Completed</option>
+                <option>Archived</option>
+                <option>Overdue</option>
 
             </select>
 
         </section>
-
 
 
         <!-- CLIENT TABLE -->
@@ -883,10 +790,7 @@
 
                 </thead>
 
-
-                <tbody
-                    id="clientTable">
-                </tbody>
+                <tbody id="clientTable"></tbody>
 
             </table>
 
@@ -897,31 +801,19 @@
 </div>
 
 
-
 <!-- =========================================================
      CLIENT MODAL
 ========================================================= -->
 
-<div
-    id="clientModal"
-    class="modal">
+<div id="clientModal" class="modal">
 
+    <div class="modal-content">
 
-    <div
-        class="modal-content">
+        <div class="modal-header">
 
-
-        <div
-            class="modal-header">
-
-
-            <h2
-                id="modalTitle">
-
+            <h2 id="modalTitle">
                 Add Client
-
             </h2>
-
 
             <button
                 class="btn-light"
@@ -933,14 +825,11 @@
 
         </div>
 
-
         <input
             type="hidden"
             id="clientId">
 
-
         <div class="form-grid">
-
 
             <div class="form-group">
 
@@ -954,7 +843,6 @@
 
             </div>
 
-
             <div class="form-group">
 
                 <label>
@@ -966,7 +854,6 @@
                     placeholder="John Smith">
 
             </div>
-
 
             <div class="form-group">
 
@@ -981,7 +868,6 @@
 
             </div>
 
-
             <div class="form-group">
 
                 <label>
@@ -993,7 +879,6 @@
                     placeholder="555-555-5555">
 
             </div>
-
 
             <div class="form-group">
 
@@ -1007,7 +892,6 @@
 
             </div>
 
-
             <div class="form-group">
 
                 <label>
@@ -1019,7 +903,6 @@
                     placeholder="INV-1001">
 
             </div>
-
 
             <div class="form-group">
 
@@ -1036,7 +919,6 @@
 
             </div>
 
-
             <div class="form-group">
 
                 <label>
@@ -1049,48 +931,29 @@
 
             </div>
 
-
             <div class="form-group">
 
                 <label>
                     Status
                 </label>
 
+                <select id="clientStatus">
 
-                <select
-                    id="clientStatus">
-
-                    <option>
-                        Under Review
-                    </option>
-
-                    <option>
-                        Pending
-                    </option>
-
-                    <option>
-                        Completed
-                    </option>
-
-                    <option>
-                        Archived
-                    </option>
-
-                    <option>
-                        Overdue
-                    </option>
+                    <option>Under Review</option>
+                    <option>Pending</option>
+                    <option>Completed</option>
+                    <option>Archived</option>
+                    <option>Overdue</option>
 
                 </select>
 
             </div>
-
 
             <div class="form-group full">
 
                 <label>
                     Notes
                 </label>
-
 
                 <textarea
                     id="notes"
@@ -1101,9 +964,7 @@
             </div>
 
 
-            <!-- =================================================
-                 DOCUMENTS
-            ================================================== -->
+            <!-- DOCUMENTS -->
 
             <div class="form-group full">
 
@@ -1113,9 +974,7 @@
                         Client Documents
                     </label>
 
-
-                    <div
-                        class="documents-toolbar">
+                    <div class="documents-toolbar">
 
                         <button
                             type="button"
@@ -1125,7 +984,6 @@
                             Upload to Google Drive
 
                         </button>
-
 
                         <button
                             type="button"
@@ -1138,12 +996,10 @@
 
                     </div>
 
-
                     <div
                         id="driveStatus"
                         class="drive-status">
                     </div>
-
 
                     <div
                         id="clientDocuments"
@@ -1162,10 +1018,7 @@
         </div>
 
 
-
-        <div
-            class="modal-footer">
-
+        <div class="modal-footer">
 
             <button
                 class="btn-primary"
@@ -1174,7 +1027,6 @@
                 Save Client
 
             </button>
-
 
             <button
                 class="btn-secondary"
@@ -1191,21 +1043,17 @@
 </div>
 
 
-
 <script>
 
-
 /* =========================================================
-   SUPABASE CONFIGURATION
+   SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
     "https://ujsnwtbdoumtqnnvopti.supabase.co";
 
-
 const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_lXhvukKVSEuQC0UlBPuLg_KNWRxfpW";
-
+    "sb_publishable_lXhvukwKVSEuQC0UlBPuLg_KNWRxfpW";
 
 const supabaseClient =
     supabase.createClient(
@@ -1214,34 +1062,25 @@ const supabaseClient =
     );
 
 
-
 /* =========================================================
-   GOOGLE CLOUD CONFIGURATION
+   GOOGLE CLOUD
 ========================================================= */
 
 const GOOGLE_CLIENT_ID =
     "778499336500-v853cm1l21fu82i4g4t85b6urj3t0ap8.apps.googleusercontent.com";
 
-
 const GOOGLE_API_KEY =
     "AIzaSyAt3-jtz0k-jgR2t3_QLeZAo3A6hz1cdmE";
-
 
 const GOOGLE_APP_ID =
     "778499336500";
 
-
-/*
-   This scope allows the application to work with
-   files selected/created through the application.
-*/
 const GOOGLE_DRIVE_SCOPE =
     "https://www.googleapis.com/auth/drive.file";
 
 
-
 /* =========================================================
-   APPLICATION STATE
+   STATE
 ========================================================= */
 
 let clients = [];
@@ -1259,51 +1098,34 @@ let pickerReady = false;
 let gisReady = false;
 
 
-
 /* =========================================================
-   GOOGLE API INITIALIZATION
+   GOOGLE INITIALIZATION
 ========================================================= */
 
 function gapiLoaded() {
 
-    if (
-        typeof gapi === "undefined"
-    ) {
+    if (typeof gapi === "undefined") {
+
+        console.error(
+            "Google API library did not load."
+        );
 
         return;
-
     }
 
-
     gapi.load(
-        "client:picker",
-        async function() {
+        "picker",
+        function() {
 
-            try {
+            pickerReady = true;
 
-                await gapi.client.load(
-                    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
-                );
-
-
-                pickerReady = true;
-
-            } catch (
-                error
-            ) {
-
-                console.error(
-                    "Google API initialization failed:",
-                    error
-                );
-
-            }
+            console.log(
+                "Google Picker loaded."
+            );
 
         }
     );
-
 }
-
 
 
 function gisLoaded() {
@@ -1312,10 +1134,12 @@ function gisLoaded() {
         typeof google === "undefined"
     ) {
 
+        console.error(
+            "Google Identity Services did not load."
+        );
+
         return;
-
     }
-
 
     tokenClient =
         google.accounts.oauth2.initTokenClient({
@@ -1331,72 +1155,41 @@ function gisLoaded() {
 
         });
 
-
     gisReady = true;
 
+    console.log(
+        "Google Identity Services loaded."
+    );
 }
 
 
-
 /* =========================================================
-   GOOGLE CONFIGURATION CHECK
-========================================================= */
-
-function ensureGoogleConfigured() {
-
-    if (
-        !GOOGLE_CLIENT_ID ||
-        !GOOGLE_API_KEY ||
-        !GOOGLE_APP_ID
-    ) {
-
-        alert(
-            "Google Drive configuration is incomplete."
-        );
-
-        return false;
-
-    }
-
-
-    if (
-        !pickerReady ||
-        !gisReady ||
-        !tokenClient
-    ) {
-
-        alert(
-            "Google Drive is still loading. " +
-            "Please try again in a moment."
-        );
-
-        return false;
-
-    }
-
-
-    return true;
-
-}
-
-
-
-/* =========================================================
-   GOOGLE AUTHORIZATION
+   GOOGLE AUTH
 ========================================================= */
 
 function authorizeGoogleDrive(
     callback
 ) {
 
-    if (
-        !ensureGoogleConfigured()
-    ) {
+    if (!pickerReady) {
+
+        alert(
+            "Google Picker has not finished loading. " +
+            "Please refresh the page and try again."
+        );
 
         return;
-
     }
 
+    if (!gisReady || !tokenClient) {
+
+        alert(
+            "Google authentication has not finished loading. " +
+            "Please refresh the page and try again."
+        );
+
+        return;
+    }
 
     tokenClient.callback =
         function(response) {
@@ -1410,24 +1203,22 @@ function authorizeGoogleDrive(
                     response
                 );
 
-
                 alert(
-                    "Google authorization failed: " +
-                    response.error
+                    "Google Drive authorization failed.\n\n" +
+                    "Error: " +
+                    (
+                        response.error ||
+                        "Unknown Google authorization error"
+                    )
                 );
 
-
                 return;
-
             }
-
 
             accessToken =
                 response.access_token;
 
-
             callback();
-
         };
 
 
@@ -1435,25 +1226,37 @@ function authorizeGoogleDrive(
 
         prompt:
             accessToken
-            ?
-            ""
-            :
-            "consent"
+            ? ""
+            : "consent"
 
     });
 
 }
 
 
-
 /* =========================================================
-   GOOGLE DRIVE UPLOAD
+   UPLOAD TO GOOGLE DRIVE
 ========================================================= */
 
 function openDriveUploadPicker() {
 
     authorizeGoogleDrive(
         function() {
+
+            const clientId =
+                document.getElementById(
+                    "clientId"
+                ).value;
+
+            if (!clientId) {
+
+                alert(
+                    "Please save the client first."
+                );
+
+                return;
+            }
+
 
             const uploadView =
                 new google.picker.DocsUploadView();
@@ -1495,15 +1298,29 @@ function openDriveUploadPicker() {
 }
 
 
-
 /* =========================================================
-   GOOGLE DRIVE SELECT EXISTING
+   SELECT EXISTING DRIVE FILE
 ========================================================= */
 
 function openDriveSelectPicker() {
 
     authorizeGoogleDrive(
         function() {
+
+            const clientId =
+                document.getElementById(
+                    "clientId"
+                ).value;
+
+            if (!clientId) {
+
+                alert(
+                    "Please save the client first."
+                );
+
+                return;
+            }
+
 
             const docsView =
                 new google.picker.DocsView(
@@ -1547,9 +1364,8 @@ function openDriveSelectPicker() {
 }
 
 
-
 /* =========================================================
-   GOOGLE PICKER CALLBACK
+   PICKER CALLBACK
 ========================================================= */
 
 async function drivePickerCallback(
@@ -1562,7 +1378,6 @@ async function drivePickerCallback(
     ) {
 
         return;
-
     }
 
 
@@ -1578,16 +1393,8 @@ async function drivePickerCallback(
     ) {
 
         return;
-
     }
 
-
-    /*
-       Add every selected document.
-
-       This also allows multi-select in future
-       if enabled in the Picker.
-    */
 
     const clientId =
         document.getElementById(
@@ -1595,16 +1402,13 @@ async function drivePickerCallback(
         ).value;
 
 
-    if (
-        !clientId
-    ) {
+    if (!clientId) {
 
         alert(
             "Please save the client before adding documents."
         );
 
         return;
-
     }
 
 
@@ -1635,69 +1439,18 @@ async function drivePickerCallback(
             "Google Drive File";
 
 
-        let fileUrl =
+        const fileUrl =
             selected.url
             ||
             `https://drive.google.com/file/d/${fileId}/view`;
 
 
-        let mimeType =
+        const mimeType =
             selected[
                 google.picker.Document.MIME_TYPE
             ]
             ||
             null;
-
-
-        try {
-
-            if (
-                gapi &&
-                gapi.client &&
-                gapi.client.drive
-            ) {
-
-                const response =
-                    await gapi.client.drive.files.get({
-
-                        fileId:
-                            fileId,
-
-                        fields:
-                            "id,name,mimeType,webViewLink"
-
-                    });
-
-
-                if (
-                    response.result
-                ) {
-
-                    fileUrl =
-                        response.result.webViewLink
-                        ||
-                        fileUrl;
-
-
-                    mimeType =
-                        response.result.mimeType
-                        ||
-                        mimeType;
-
-                }
-
-            }
-
-        } catch (
-            metadataError
-        ) {
-
-            console.warn(
-                "Drive metadata lookup failed:",
-                metadataError
-            );
-
-        }
 
 
         const {
@@ -1737,17 +1490,21 @@ async function drivePickerCallback(
         ) {
 
             console.error(
-                "Unable to save document:",
+                "Document save error:",
                 error
             );
 
-            continue;
+            alert(
+                "Google Drive selected the file, " +
+                "but Supabase could not save it:\n\n" +
+                error.message
+            );
 
+            continue;
         }
 
 
         addedCount++;
-
     }
 
 
@@ -1763,7 +1520,6 @@ async function drivePickerCallback(
     );
 
 }
-
 
 
 /* =========================================================
@@ -1793,9 +1549,7 @@ async function login() {
         );
 
 
-    message.textContent =
-        "";
-
+    message.textContent = "";
 
     message.className =
         "message";
@@ -1809,14 +1563,11 @@ async function login() {
         message.textContent =
             "Please enter your email and password.";
 
-
         message.classList.add(
             "error"
         );
 
-
         return;
-
     }
 
 
@@ -1830,11 +1581,8 @@ async function login() {
                 .auth
                 .signInWithPassword({
 
-                    email:
-                        email,
-
-                    password:
-                        password
+                    email,
+                    password
 
                 });
 
@@ -1847,14 +1595,11 @@ async function login() {
                 "Login failed: " +
                 error.message;
 
-
             message.classList.add(
                 "error"
             );
 
-
             return;
-
         }
 
 
@@ -1863,7 +1608,6 @@ async function login() {
 
 
         await initializeApp();
-
 
     } catch (
         error
@@ -1876,19 +1620,16 @@ async function login() {
                 "Unexpected error."
             );
 
-
         message.classList.add(
             "error"
         );
 
     }
-
 }
 
 
-
 /* =========================================================
-   INITIALIZE APPLICATION
+   INITIALIZE
 ========================================================= */
 
 async function initializeApp() {
@@ -1903,12 +1644,9 @@ async function initializeApp() {
             .getUser();
 
 
-    if (
-        !user
-    ) {
+    if (!user) {
 
         return;
-
     }
 
 
@@ -1954,7 +1692,6 @@ async function initializeApp() {
 
 
         return;
-
     }
 
 
@@ -1964,13 +1701,9 @@ async function initializeApp() {
         ).toLowerCase();
 
 
-    /*
-       Backward compatibility with
-       accounts still marked Staff.
-    */
-
     if (
-        currentRole === "staff"
+        currentRole ===
+        "staff"
     ) {
 
         currentRole =
@@ -2013,7 +1746,6 @@ async function initializeApp() {
 }
 
 
-
 /* =========================================================
    LOAD CLIENTS
 ========================================================= */
@@ -2052,9 +1784,7 @@ async function loadClients() {
             error.message
         );
 
-
         return;
-
     }
 
 
@@ -2065,15 +1795,13 @@ async function loadClients() {
 
     updateDashboard();
 
-
     renderClients();
 
 }
 
 
-
 /* =========================================================
-   DASHBOARD METRICS
+   DASHBOARD
 ========================================================= */
 
 function updateDashboard() {
@@ -2126,19 +1854,17 @@ function updateDashboard() {
 
     const outstanding =
         clients
-
             .filter(
                 c =>
                     c.status !==
                     "Completed"
             )
-
             .reduce(
                 (
-                    sum,
+                    total,
                     c
                 ) =>
-                    sum +
+                    total +
                     Number(
                         c.invoice_amount ||
                         0
@@ -2156,14 +1882,11 @@ function updateDashboard() {
             {
                 minimumFractionDigits:
                     2,
-
                 maximumFractionDigits:
                     2
             }
         );
-
 }
-
 
 
 /* =========================================================
@@ -2191,51 +1914,31 @@ function renderClients() {
         clients.filter(
             client => {
 
-                const searchableText =
+                const text =
                     [
 
                         client.company_name,
-
                         client.contact_name,
-
                         client.email,
-
                         client.phone,
-
                         client.service,
-
                         client.invoice_number,
-
                         client.notes
 
                     ]
 
-                    .filter(
-                        Boolean
-                    )
-
-                    .join(
-                        " "
-                    )
-
+                    .filter(Boolean)
+                    .join(" ")
                     .toLowerCase();
 
 
                 return (
-
-                    searchableText.includes(
-                        search
-                    )
-
-                    &&
-
+                    text.includes(search) &&
                     (
-                        !selectedStatus
-                        ||
+                        !selectedStatus ||
                         client.status ===
                         selectedStatus
                     )
-
                 );
 
             }
@@ -2275,7 +1978,6 @@ function renderClients() {
 
 
         return;
-
     }
 
 
@@ -2288,21 +1990,19 @@ function renderClients() {
                 );
 
 
-            const statusClass =
-                getStatusClass(
-                    client.status
-                );
-
-
             row.innerHTML = `
 
                 <td>
+
                     <strong>
+
                         ${escapeHtml(
                             client.company_name ||
                             ""
                         )}
+
                     </strong>
+
                 </td>
 
 
@@ -2318,10 +2018,13 @@ function renderClients() {
                         ?
                         `
                         <br>
+
                         <small>
+
                             ${escapeHtml(
                                 client.email
                             )}
+
                         </small>
                         `
                         :
@@ -2357,7 +2060,6 @@ function renderClients() {
                         {
                             minimumFractionDigits:
                                 2,
-
                             maximumFractionDigits:
                                 2
                         }
@@ -2380,7 +2082,9 @@ function renderClients() {
                 <td>
 
                     <span
-                        class="status ${statusClass}">
+                        class="status ${getStatusClass(
+                            client.status
+                        )}">
 
                         ${escapeHtml(
                             client.status
@@ -2420,7 +2124,8 @@ function renderClients() {
 
 
                     ${
-                        currentRole === "admin"
+                        currentRole ===
+                        "admin"
 
                         ?
 
@@ -2452,9 +2157,7 @@ function renderClients() {
 
         }
     );
-
 }
-
 
 
 /* =========================================================
@@ -2488,9 +2191,7 @@ function getStatusClass(
             return "";
 
     }
-
 }
-
 
 
 /* =========================================================
@@ -2498,49 +2199,37 @@ function getStatusClass(
 ========================================================= */
 
 function formatDate(
-    dateString
+    value
 ) {
 
-    if (
-        !dateString
-    ) {
-
+    if (!value) {
         return "";
-
     }
 
 
     return new Date(
-        dateString +
-        "T00:00:00"
+        value + "T00:00:00"
     ).toLocaleDateString(
         "en-US"
     );
-
 }
 
 
 function formatDateTime(
-    timestamp
+    value
 ) {
 
-    if (
-        !timestamp
-    ) {
-
+    if (!value) {
         return "";
-
     }
 
 
     return new Date(
-        timestamp
+        value
     ).toLocaleString(
         "en-US"
     );
-
 }
-
 
 
 /* =========================================================
@@ -2572,7 +2261,6 @@ function openNewClient() {
 }
 
 
-
 /* =========================================================
    CLEAR FORM
 ========================================================= */
@@ -2580,7 +2268,6 @@ function openNewClient() {
 function clearForm() {
 
     [
-
         "companyName",
         "contactName",
         "clientEmail",
@@ -2626,9 +2313,7 @@ function clearForm() {
         </p>
 
     `;
-
 }
-
 
 
 /* =========================================================
@@ -2647,12 +2332,8 @@ async function editClient(
         );
 
 
-    if (
-        !client
-    ) {
-
+    if (!client) {
         return;
-
     }
 
 
@@ -2751,47 +2432,37 @@ async function editClient(
 }
 
 
-
 /* =========================================================
    SAVE CLIENT
 ========================================================= */
 
 async function saveClient() {
 
-    if (
-        !currentUser
-    ) {
+    if (!currentUser) {
 
         alert(
             "Your login session has expired."
         );
 
-
         return;
-
     }
 
 
     const companyName =
-        document
-            .getElementById(
-                "companyName"
-            )
-            .value
-            .trim();
+        document.getElementById(
+            "companyName"
+        )
+        .value
+        .trim();
 
 
-    if (
-        !companyName
-    ) {
+    if (!companyName) {
 
         alert(
             "Company name is required."
         );
 
-
         return;
-
     }
 
 
@@ -2807,77 +2478,68 @@ async function saveClient() {
             companyName,
 
         contact_name:
-            document
-                .getElementById(
-                    "contactName"
-                )
-                .value
-                .trim(),
+            document.getElementById(
+                "contactName"
+            )
+            .value
+            .trim(),
 
         email:
-            document
-                .getElementById(
-                    "clientEmail"
-                )
-                .value
-                .trim(),
+            document.getElementById(
+                "clientEmail"
+            )
+            .value
+            .trim(),
 
         phone:
-            document
-                .getElementById(
-                    "clientPhone"
-                )
-                .value
-                .trim(),
+            document.getElementById(
+                "clientPhone"
+            )
+            .value
+            .trim(),
 
         service:
-            document
-                .getElementById(
-                    "service"
-                )
-                .value
-                .trim(),
+            document.getElementById(
+                "service"
+            )
+            .value
+            .trim(),
 
         invoice_number:
-            document
-                .getElementById(
-                    "invoiceNumber"
-                )
-                .value
-                .trim(),
+            document.getElementById(
+                "invoiceNumber"
+            )
+            .value
+            .trim(),
 
         invoice_amount:
             Number(
-                document
-                    .getElementById(
-                        "invoiceAmount"
-                    )
-                    .value ||
+                document.getElementById(
+                    "invoiceAmount"
+                )
+                .value ||
                 0
             ),
 
         due_date:
-            document
-                .getElementById(
-                    "dueDate"
-                )
-                .value ||
+            document.getElementById(
+                "dueDate"
+            )
+            .value ||
             null,
 
         status:
-            document
-                .getElementById(
-                    "clientStatus"
-                )
-                .value,
+            document.getElementById(
+                "clientStatus"
+            )
+            .value,
 
         notes:
-            document
-                .getElementById(
-                    "notes"
-                )
-                .value
-                .trim(),
+            document.getElementById(
+                "notes"
+            )
+            .value
+            .trim(),
 
         updated_by:
             currentUser.id
@@ -2888,22 +2550,13 @@ async function saveClient() {
     let response;
 
 
-    if (
-        clientId
-    ) {
+    if (clientId) {
 
         response =
             await supabaseClient
-                .from(
-                    "clients"
-                )
-                .update(
-                    record
-                )
-                .eq(
-                    "id",
-                    clientId
-                );
+                .from("clients")
+                .update(record)
+                .eq("id", clientId);
 
     } else {
 
@@ -2913,38 +2566,28 @@ async function saveClient() {
 
         response =
             await supabaseClient
-                .from(
-                    "clients"
-                )
-                .insert(
-                    record
-                );
+                .from("clients")
+                .insert(record);
 
     }
 
 
-    if (
-        response.error
-    ) {
+    if (response.error) {
 
         alert(
             "Unable to save client:\n\n" +
             response.error.message
         );
 
-
         return;
-
     }
 
 
     closeModal();
 
-
     await loadClients();
 
 }
-
 
 
 /* =========================================================
@@ -2964,9 +2607,7 @@ async function loadClientDocuments(
     container.innerHTML = `
 
         <p class="muted">
-
             Loading documents...
-
         </p>
 
     `;
@@ -2977,20 +2618,9 @@ async function loadClientDocuments(
         error
     } =
         await supabaseClient
-
-            .from(
-                "client_documents"
-            )
-
-            .select(
-                "*"
-            )
-
-            .eq(
-                "client_id",
-                clientId
-            )
-
+            .from("client_documents")
+            .select("*")
+            .eq("client_id", clientId)
             .order(
                 "created_at",
                 {
@@ -3000,9 +2630,7 @@ async function loadClientDocuments(
             );
 
 
-    if (
-        error
-    ) {
+    if (error) {
 
         container.innerHTML = `
 
@@ -3016,9 +2644,7 @@ async function loadClientDocuments(
 
         `;
 
-
         return;
-
     }
 
 
@@ -3030,21 +2656,16 @@ async function loadClientDocuments(
         container.innerHTML = `
 
             <p class="muted">
-
                 No documents attached.
-
             </p>
 
         `;
 
-
         return;
-
     }
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
     data.forEach(
@@ -3073,7 +2694,6 @@ async function loadClientDocuments(
                         )}
 
                     </div>
-
 
                     <div
                         class="document-meta">
@@ -3105,12 +2725,12 @@ async function loadClientDocuments(
                     class="document-actions">
 
                     <a
+                        class="document-link"
                         href="${escapeAttribute(
                             documentRecord.file_url
                         )}"
                         target="_blank"
-                        rel="noopener noreferrer"
-                        class="document-link">
+                        rel="noopener noreferrer">
 
                         Open
 
@@ -3118,7 +2738,8 @@ async function loadClientDocuments(
 
 
                     ${
-                        currentRole === "admin"
+                        currentRole ===
+                        "admin"
 
                         ?
 
@@ -3150,13 +2771,11 @@ async function loadClientDocuments(
 
         }
     );
-
 }
 
 
-
 /* =========================================================
-   VIEW DOCUMENTS
+   VIEW CLIENT DOCUMENTS
 ========================================================= */
 
 async function viewClientDocuments(
@@ -3171,12 +2790,8 @@ async function viewClientDocuments(
         );
 
 
-    if (
-        !client
-    ) {
-
+    if (!client) {
         return;
-
     }
 
 
@@ -3184,10 +2799,7 @@ async function viewClientDocuments(
         "modalTitle"
     ).textContent =
         "Client Documents — " +
-        (
-            client.company_name ||
-            "Client"
-        );
+        client.company_name;
 
 
     document.getElementById(
@@ -3273,11 +2885,10 @@ async function viewClientDocuments(
 
 
     await loadClientDocuments(
-        clientId
+        client.id
     );
 
 }
-
 
 
 /* =========================================================
@@ -3297,9 +2908,7 @@ async function deleteDocument(
             "Only an administrator can delete documents."
         );
 
-
         return;
-
     }
 
 
@@ -3310,7 +2919,6 @@ async function deleteDocument(
     ) {
 
         return;
-
     }
 
 
@@ -3318,48 +2926,32 @@ async function deleteDocument(
         error
     } =
         await supabaseClient
-
-            .from(
-                "client_documents"
-            )
-
+            .from("client_documents")
             .delete()
-
-            .eq(
-                "id",
-                id
-            );
+            .eq("id", id);
 
 
-    if (
-        error
-    ) {
+    if (error) {
 
         alert(
             "Unable to remove document:\n\n" +
             error.message
         );
 
-
         return;
-
     }
 
 
     const clientId =
-        document
-            .getElementById(
-                "clientId"
-            )
-            .value;
+        document.getElementById(
+            "clientId"
+        ).value;
 
 
     await loadClientDocuments(
         clientId
     );
-
 }
-
 
 
 /* =========================================================
@@ -3379,9 +2971,7 @@ async function deleteClient(
             "Only an administrator can delete clients."
         );
 
-
         return;
-
     }
 
 
@@ -3392,7 +2982,6 @@ async function deleteClient(
     ) {
 
         return;
-
     }
 
 
@@ -3400,35 +2989,24 @@ async function deleteClient(
         error
     } =
         await supabaseClient
-            .from(
-                "clients"
-            )
+            .from("clients")
             .delete()
-            .eq(
-                "id",
-                id
-            );
+            .eq("id", id);
 
 
-    if (
-        error
-    ) {
+    if (error) {
 
         alert(
             "Unable to delete client:\n\n" +
             error.message
         );
 
-
         return;
-
     }
 
 
     await loadClients();
-
 }
-
 
 
 /* =========================================================
@@ -3441,9 +3019,7 @@ function closeModal() {
         "clientModal"
     ).style.display =
         "none";
-
 }
-
 
 
 /* =========================================================
@@ -3452,51 +3028,35 @@ function closeModal() {
 
 async function logout() {
 
-    await supabaseClient
-        .auth
-        .signOut();
+    await supabaseClient.auth.signOut();
 
 
     currentUser = null;
-
     currentRole = null;
-
     clients = [];
 
 
     document
-        .getElementById(
-            "app"
-        )
+        .getElementById("app")
         .classList
-        .add(
-            "hidden"
-        );
+        .add("hidden");
 
 
     document
-        .getElementById(
-            "loginPage"
-        )
+        .getElementById("loginPage")
         .classList
-        .remove(
-            "hidden"
-        );
+        .remove("hidden");
 
 
     document.getElementById(
         "email"
-    ).value =
-        "";
+    ).value = "";
 
 
     document.getElementById(
         "password"
-    ).value =
-        "";
-
+    ).value = "";
 }
-
 
 
 /* =========================================================
@@ -3507,9 +3067,7 @@ function escapeHtml(
     value
 ) {
 
-    return String(
-        value
-    )
+    return String(value)
         .replaceAll(
             "&",
             "&amp;"
@@ -3538,9 +3096,7 @@ function escapeAttribute(
     value
 ) {
 
-    return String(
-        value
-    )
+    return String(value)
         .replaceAll(
             "&",
             "&amp;"
@@ -3559,7 +3115,6 @@ function escapeAttribute(
         );
 
 }
-
 
 
 /* =========================================================
