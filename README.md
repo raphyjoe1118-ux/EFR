@@ -956,7 +956,7 @@ const SUPABASE_URL =
     "https://ujsnwtbdoumtqnnvopti.supabase.co";
 
 const SUPABASE_ANON_KEY =
-    "sb_publishable_lXhvukKVSEuQC0UlBPuLg_KNWRxfpW";
+    "sb_publishable_lXhvukwKVSEuQC0UlBPuLg_KNWRxfpW";
 
 
 /* ==========================================================
