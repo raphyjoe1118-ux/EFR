@@ -1070,7 +1070,7 @@ const GOOGLE_CLIENT_ID =
     "778499336500-v853cm1l21fu82i4g4t85b6urj3t0ap8.apps.googleusercontent.com";
 
 const GOOGLE_API_KEY =
-    "AIzaSyAt3-jtz0k-jgR2t3_QLeZAo3A6hz1cdmE";
+    "AIzaSyCRf531BtpZQilnpvTodUKq8ERyRsK0QIg";
 
 const GOOGLE_APP_ID =
     "778499336500";
