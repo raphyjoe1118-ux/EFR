@@ -1848,7 +1848,7 @@ const SUPABASE_URL =
 
 
 const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_lXhvukKVSEuQC0UlBPuLg_KNWRxfpW";
+    "sb_publishable_lXhvukwKVSEuQC0UlBPuLg_KNWRxfpW";
 
 
 const supabaseClient =
