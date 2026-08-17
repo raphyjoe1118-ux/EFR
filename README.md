@@ -1,588 +1,1136 @@
 
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>EFR Accounting Firm | Client Dashboard</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script
-    async
-    defer
-    src="https://apis.google.com/js/api.js"
-    onload="gapiLoaded()">
-</script>
-
-<script
-    async
-    defer
-    src="https://accounts.google.com/gsi/client"
-    onload="gisLoaded()">
-</script>
-
-<style>
-
-* {
-    box-sizing: border-box;
-}
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f6f8;
-    color: #1f2937;
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-#loginPage {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: #eef2f7;
-}
-
-.login-box {
-    width: 100%;
-    max-width: 430px;
-    background: #fff;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0,0,0,.10);
-}
-
-.login-logo {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.logo-circle {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    margin: 0 auto 15px;
-    background: #163a5f;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 23px;
-    font-weight: bold;
-}
-
-.login-logo h1 {
-    margin: 0;
-    color: #163a5f;
-    font-size: 28px;
-}
-
-.login-logo p {
-    color: #6b7280;
-    margin-top: 8px;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.topbar {
-    background: #163a5f;
-    color: #fff;
-    padding: 18px 30px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.brand-logo {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: #fff;
-    color: #163a5f;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-}
-
-.brand h2 {
-    margin: 0;
-    font-size: 21px;
-}
-
-.brand small {
-    display: block;
-    margin-top: 3px;
-    opacity: .85;
-}
-
-.topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.user-role {
-    font-size: 14px;
-}
-
-/* =========================
-   GENERAL
-========================= */
-
-.container {
-    max-width: 1500px;
-    margin: 0 auto;
-    padding: 30px;
-}
-
-button {
-    border: none;
-    border-radius: 7px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-button:hover {
-    opacity: .9;
-}
-
-button:disabled {
-    opacity: .55;
-    cursor: not-allowed;
-}
-
-.btn-primary {
-    background: #2563eb;
-    color: #fff;
-}
-
-.btn-danger {
-    background: #dc2626;
-    color: #fff;
-}
-
-.btn-success {
-    background: #16a34a;
-    color: #fff;
-}
-
-.btn-secondary {
-    background: #6b7280;
-    color: #fff;
-}
-
-.btn-light {
-    background: #e5e7eb;
-    color: #1f2937;
-}
-
-/* =========================
-   DASHBOARD CARDS
-========================= */
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 18px;
-    margin-bottom: 25px;
-}
-
-.card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 22px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.05);
-}
-
-.card h4 {
-    margin: 0 0 10px;
-    color: #6b7280;
-    font-size: 14px;
-    font-weight: normal;
-}
-
-.card h2 {
-    margin: 0;
-    font-size: 28px;
-    color: #163a5f;
-}
-
-/* =========================
-   TOOLBAR
-========================= */
-
-.toolbar {
-    background: #fff;
-    padding: 18px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.toolbar input,
-.toolbar select {
-    width: auto;
-    min-width: 220px;
-}
-
-/* =========================
-   CLIENT TABLE
-========================= */
-
-.table-container {
-    background: #fff;
-    border-radius: 12px;
-    overflow-x: auto;
-    overflow-y: auto;
-    max-height: 65vh;
-    min-height: 450px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.05);
-}
-
-.table-container thead th {
-    position: sticky;
-    top: 0;
-    z-index: 5;
-    background: #1f2937;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 1200px;
-}
-
-th,
-td {
-    padding: 13px 14px;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-th {
-    background: #1f2937;
-    color: #fff;
-    font-size: 13px;
-}
-
-td {
-    font-size: 14px;
-    background: #fff;
-}
-
-tbody tr:hover td {
-    background: #f9fafb;
-}
-
-/* =========================
-   STATUS
-========================= */
-
-.status {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-.status-under-review {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.status-pending {
-    background: #dbeafe;
-    color: #1e40af;
-}
-
-.status-completed {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.status-archived {
-    background: #e5e7eb;
-    color: #374151;
-}
-
-.status-overdue {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-/* =========================
-   FORMS
-========================= */
-
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 11px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 7px;
-    font: inherit;
-    background: #fff;
-}
-
-label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 6px;
-    font-size: 14px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.form-grid .full {
-    grid-column: 1 / -1;
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.50);
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    z-index: 1000;
-}
-
-.modal-content {
-    background: #fff;
-    width: 100%;
-    max-width: 900px;
-    max-height: 92vh;
-    overflow-y: auto;
-    padding: 30px;
-    border-radius: 14px;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.modal-header h2 {
-    margin: 0;
-    color: #163a5f;
-}
-
-.modal-footer {
-    margin-top: 20px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-/* =========================
-   DOCUMENTS
-========================= */
-
-.documents-section {
-    border: 1px solid #e5e7eb;
-    background: #f9fafb;
-    border-radius: 10px;
-    padding: 16px;
-}
-
-.documents-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
-.documents-list {
-    margin-top: 12px;
-}
-
-.document-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 11px 12px;
-    margin-bottom: 8px;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-}
-
-.document-info {
-    min-width: 0;
-    flex: 1;
-}
-
-.document-name {
-    font-weight: 600;
-    overflow-wrap: anywhere;
-}
-
-.document-meta {
-    margin-top: 4px;
-    color: #6b7280;
-    font-size: 12px;
-}
-
-.document-actions {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.document-link {
-    display: inline-block;
-    color: #fff;
-    background: #2563eb;
-    padding: 8px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 13px;
-}
-
-.document-delete {
-    background: #dc2626;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 12px;
-}
-
-.drive-status {
-    color: #6b7280;
-    font-size: 13px;
-    margin-top: 8px;
-}
-
-/* =========================
-   MESSAGES
-========================= */
-
-.message {
-    margin-top: 15px;
-    font-size: 14px;
-}
-
-.error {
-    color: #dc2626;
-}
-
-.success {
-    color: #16a34a;
-}
-
-.muted {
-    color: #9ca3af;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 50px;
-    color: #6b7280;
-}
-
-a {
-    color: #2563eb;
-}
-
-@media (max-width: 700px) {
-
-    .topbar {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .topbar-right {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .container {
-        padding: 15px;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .form-grid .full {
-        grid-column: auto;
-    }
-
-    .toolbar input,
-    .toolbar select {
-        width: 100%;
-    }
-
-    .table-container {
-        max-height: 70vh;
-        min-height: 400px;
-    }
-
-    .modal-content {
-        padding: 20px;
-    }
-
-    .document-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-
-</style>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        EFR Accounting Firm | Client Dashboard
+    </title>
+
+
+    <!-- ======================================================
+         SUPABASE
+    ======================================================= -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+
+
+    <!-- ======================================================
+         GOOGLE IDENTITY SERVICES
+         NO GOOGLE API KEY REQUIRED
+    ======================================================= -->
+
+    <script
+        src="https://accounts.google.com/gsi/client"
+        async
+        defer>
+    </script>
+
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f6f8;
+
+            color: #1f2937;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+
+        /* =====================================================
+           LOGIN
+        ===================================================== */
+
+        #loginPage {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            background: #eef2f7;
+
+        }
+
+
+        .login-box {
+
+            width: 100%;
+
+            max-width: 430px;
+
+            background: #ffffff;
+
+            padding: 40px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 10px 40px
+                rgba(0, 0, 0, .10);
+
+        }
+
+
+        .login-logo {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .logo-circle {
+
+            width: 70px;
+
+            height: 70px;
+
+            border-radius: 50%;
+
+            margin: 0 auto 15px;
+
+            background: #163a5f;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 23px;
+
+            font-weight: bold;
+
+        }
+
+
+        .login-logo h1 {
+
+            margin: 0;
+
+            color: #163a5f;
+
+            font-size: 28px;
+
+        }
+
+
+        .login-logo p {
+
+            color: #6b7280;
+
+            margin-top: 8px;
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .topbar {
+
+            background: #163a5f;
+
+            color: white;
+
+            padding: 18px 30px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, .12);
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+        }
+
+
+        .brand-logo {
+
+            width: 46px;
+
+            height: 46px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            color: #163a5f;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: bold;
+
+        }
+
+
+        .brand h2 {
+
+            margin: 0;
+
+            font-size: 21px;
+
+        }
+
+
+        .brand small {
+
+            display: block;
+
+            margin-top: 3px;
+
+            opacity: .85;
+
+        }
+
+
+        .topbar-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+        }
+
+
+        .user-role {
+
+            font-size: 14px;
+
+        }
+
+
+        /* =====================================================
+           GENERAL
+        ===================================================== */
+
+        .container {
+
+            max-width: 1500px;
+
+            margin: 0 auto;
+
+            padding: 30px;
+
+        }
+
+
+        button {
+
+            border: none;
+
+            border-radius: 7px;
+
+            padding: 10px 15px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            transition: .2s;
+
+        }
+
+
+        button:hover {
+
+            opacity: .9;
+
+        }
+
+
+        button:disabled {
+
+            opacity: .5;
+
+            cursor: not-allowed;
+
+        }
+
+
+        .btn-primary {
+
+            background: #2563eb;
+
+            color: white;
+
+        }
+
+
+        .btn-danger {
+
+            background: #dc2626;
+
+            color: white;
+
+        }
+
+
+        .btn-success {
+
+            background: #16a34a;
+
+            color: white;
+
+        }
+
+
+        .btn-secondary {
+
+            background: #6b7280;
+
+            color: white;
+
+        }
+
+
+        .btn-light {
+
+            background: #e5e7eb;
+
+            color: #1f2937;
+
+        }
+
+
+        /* =====================================================
+           DASHBOARD CARDS
+        ===================================================== */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(190px, 1fr)
+                );
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .card {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, .05);
+
+        }
+
+
+        .card h4 {
+
+            margin: 0 0 10px;
+
+            color: #6b7280;
+
+            font-size: 14px;
+
+            font-weight: normal;
+
+        }
+
+
+        .card h2 {
+
+            margin: 0;
+
+            font-size: 28px;
+
+            color: #163a5f;
+
+        }
+
+
+        /* =====================================================
+           TOOLBAR
+        ===================================================== */
+
+        .toolbar {
+
+            background: white;
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+        }
+
+
+        .toolbar input,
+        .toolbar select {
+
+            width: auto;
+
+            min-width: 220px;
+
+        }
+
+
+        /* =====================================================
+           CLIENT TABLE
+        ===================================================== */
+
+        .table-container {
+
+            background: white;
+
+            border-radius: 12px;
+
+            overflow-x: auto;
+
+            overflow-y: auto;
+
+            max-height: 65vh;
+
+            min-height: 450px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, .05);
+
+        }
+
+
+        .table-container thead th {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 5;
+
+            background: #1f2937;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 1200px;
+
+        }
+
+
+        th,
+        td {
+
+            padding: 13px 14px;
+
+            text-align: left;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+        }
+
+
+        th {
+
+            background: #1f2937;
+
+            color: white;
+
+            font-size: 13px;
+
+        }
+
+
+        td {
+
+            font-size: 14px;
+
+            background: white;
+
+        }
+
+
+        tbody tr:hover td {
+
+            background: #f9fafb;
+
+        }
+
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        .status {
+
+            display: inline-block;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+
+        }
+
+
+        .status-under-review {
+
+            background: #fef3c7;
+
+            color: #92400e;
+
+        }
+
+
+        .status-pending {
+
+            background: #dbeafe;
+
+            color: #1e40af;
+
+        }
+
+
+        .status-completed {
+
+            background: #dcfce7;
+
+            color: #166534;
+
+        }
+
+
+        .status-archived {
+
+            background: #e5e7eb;
+
+            color: #374151;
+
+        }
+
+
+        .status-overdue {
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+        }
+
+
+        /* =====================================================
+           FORMS
+        ===================================================== */
+
+        input,
+        select,
+        textarea {
+
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius: 7px;
+
+            font: inherit;
+
+            background: white;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            font-weight: 600;
+
+            margin-bottom: 6px;
+
+            font-size: 14px;
+
+        }
+
+
+        .form-group {
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 15px;
+
+        }
+
+
+        .form-grid .full {
+
+            grid-column: 1 / -1;
+
+        }
+
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .modal {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0, 0, 0, .50);
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+
+            z-index: 1000;
+
+        }
+
+
+        .modal-content {
+
+            background: white;
+
+            width: 100%;
+
+            max-width: 950px;
+
+            max-height: 92vh;
+
+            overflow-y: auto;
+
+            padding: 30px;
+
+            border-radius: 14px;
+
+        }
+
+
+        .modal-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .modal-header h2 {
+
+            margin: 0;
+
+            color: #163a5f;
+
+        }
+
+
+        .modal-footer {
+
+            margin-top: 20px;
+
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        /* =====================================================
+           GOOGLE DRIVE DOCUMENTS
+        ===================================================== */
+
+        .documents-section {
+
+            border:
+                1px solid #e5e7eb;
+
+            background: #f9fafb;
+
+            border-radius: 10px;
+
+            padding: 16px;
+
+        }
+
+
+        .documents-toolbar {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .document-input {
+
+            display: none;
+
+        }
+
+
+        .documents-list {
+
+            margin-top: 12px;
+
+        }
+
+
+        .document-item {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+
+            gap: 12px;
+
+            padding: 11px 12px;
+
+            margin-bottom: 8px;
+
+            background: white;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 8px;
+
+        }
+
+
+        .document-info {
+
+            min-width: 0;
+
+            flex: 1;
+
+        }
+
+
+        .document-name {
+
+            font-weight: 600;
+
+            overflow-wrap: anywhere;
+
+        }
+
+
+        .document-meta {
+
+            margin-top: 4px;
+
+            color: #6b7280;
+
+            font-size: 12px;
+
+        }
+
+
+        .document-actions {
+
+            display: flex;
+
+            gap: 6px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .document-link {
+
+            display: inline-block;
+
+            color: white;
+
+            background: #2563eb;
+
+            padding: 8px 12px;
+
+            border-radius: 6px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+        }
+
+
+        .document-delete {
+
+            background: #dc2626;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 6px;
+
+            padding: 8px 12px;
+
+        }
+
+
+        .drive-status {
+
+            color: #6b7280;
+
+            font-size: 13px;
+
+            margin-top: 8px;
+
+        }
+
+
+        .drive-connected {
+
+            background: #ecfdf5;
+
+            color: #166534;
+
+            padding: 10px;
+
+            border-radius: 8px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .drive-file-browser {
+
+            max-height: 320px;
+
+            overflow-y: auto;
+
+            margin-top: 12px;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 8px;
+
+            background: white;
+
+        }
+
+
+        .drive-file {
+
+            padding: 11px 12px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            gap: 10px;
+
+        }
+
+
+        .drive-file:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .drive-file-name {
+
+            min-width: 0;
+
+            overflow-wrap: anywhere;
+
+        }
+
+
+        /* =====================================================
+           MESSAGES
+        ===================================================== */
+
+        .message {
+
+            margin-top: 15px;
+
+            font-size: 14px;
+
+        }
+
+
+        .error {
+
+            color: #dc2626;
+
+        }
+
+
+        .success {
+
+            color: #16a34a;
+
+        }
+
+
+        .muted {
+
+            color: #9ca3af;
+
+        }
+
+
+        .empty-state {
+
+            text-align: center;
+
+            padding: 50px;
+
+            color: #6b7280;
+
+        }
+
+
+        a {
+
+            color: #2563eb;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (
+            max-width: 700px
+        ) {
+
+            .topbar {
+
+                flex-direction: column;
+
+                align-items:
+                    flex-start;
+
+            }
+
+
+            .topbar-right {
+
+                width: 100%;
+
+                justify-content:
+                    space-between;
+
+            }
+
+
+            .container {
+
+                padding: 15px;
+
+            }
+
+
+            .form-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .form-grid .full {
+
+                grid-column: auto;
+
+            }
+
+
+            .toolbar input,
+            .toolbar select {
+
+                width: 100%;
+
+            }
+
+
+            .table-container {
+
+                max-height: 70vh;
+
+                min-height: 400px;
+
+            }
+
+
+            .modal-content {
+
+                padding: 20px;
+
+            }
+
+
+            .document-item {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+
+            }
+
+
+            .drive-file {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<!-- =========================================================
+
+<!-- ==========================================================
      LOGIN
-========================================================= -->
+=========================================================== -->
 
 <div id="loginPage">
 
@@ -594,17 +1142,25 @@ a {
                 EFR
             </div>
 
-            <h1>EFR Accounting Firm</h1>
 
-            <p>Client Management Portal</p>
+            <h1>
+                EFR Accounting Firm
+            </h1>
+
+
+            <p>
+                Client Management Portal
+            </p>
 
         </div>
+
 
         <div class="form-group">
 
             <label for="email">
                 Email
             </label>
+
 
             <input
                 type="email"
@@ -614,11 +1170,13 @@ a {
 
         </div>
 
+
         <div class="form-group">
 
             <label for="password">
                 Password
             </label>
+
 
             <input
                 type="password"
@@ -627,6 +1185,7 @@ a {
                 autocomplete="current-password">
 
         </div>
+
 
         <button
             class="btn-primary"
@@ -637,18 +1196,26 @@ a {
 
         </button>
 
-        <div id="loginMessage" class="message"></div>
+
+        <div
+            id="loginMessage"
+            class="message">
+        </div>
 
     </div>
 
 </div>
 
 
-<!-- =========================================================
-     APPLICATION
-========================================================= -->
 
-<div id="app" class="hidden">
+<!-- ==========================================================
+     APPLICATION
+=========================================================== -->
+
+<div
+    id="app"
+    class="hidden">
+
 
     <header class="topbar">
 
@@ -658,9 +1225,13 @@ a {
                 EFR
             </div>
 
+
             <div>
 
-                <h2>EFR Accounting Firm</h2>
+                <h2>
+                    EFR Accounting Firm
+                </h2>
+
 
                 <small>
                     Client Accounting Dashboard
@@ -670,12 +1241,14 @@ a {
 
         </div>
 
+
         <div class="topbar-right">
 
             <span
                 class="user-role"
                 id="userRole">
             </span>
+
 
             <button
                 class="btn-danger"
@@ -690,48 +1263,112 @@ a {
     </header>
 
 
+
     <main class="container">
+
 
         <!-- DASHBOARD -->
 
         <section class="cards">
 
-            <div class="card">
-                <h4>Total Clients</h4>
-                <h2 id="totalClients">0</h2>
-            </div>
 
             <div class="card">
-                <h4>Under Review</h4>
-                <h2 id="reviewClients">0</h2>
+
+                <h4>
+                    Total Clients
+                </h4>
+
+
+                <h2
+                    id="totalClients">
+                    0
+                </h2>
+
             </div>
 
-            <div class="card">
-                <h4>Pending</h4>
-                <h2 id="pendingClients">0</h2>
-            </div>
 
             <div class="card">
-                <h4>Completed</h4>
-                <h2 id="completedClients">0</h2>
+
+                <h4>
+                    Under Review
+                </h4>
+
+
+                <h2
+                    id="reviewClients">
+                    0
+                </h2>
+
             </div>
 
-            <div class="card">
-                <h4>Overdue</h4>
-                <h2 id="overdueClients">0</h2>
-            </div>
 
             <div class="card">
-                <h4>Outstanding</h4>
-                <h2 id="outstanding">$0.00</h2>
+
+                <h4>
+                    Pending
+                </h4>
+
+
+                <h2
+                    id="pendingClients">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="card">
+
+                <h4>
+                    Completed
+                </h4>
+
+
+                <h2
+                    id="completedClients">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="card">
+
+                <h4>
+                    Overdue
+                </h4>
+
+
+                <h2
+                    id="overdueClients">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="card">
+
+                <h4>
+                    Outstanding
+                </h4>
+
+
+                <h2
+                    id="outstanding">
+                    $0.00
+                </h2>
+
             </div>
 
         </section>
 
 
+
         <!-- SEARCH -->
 
         <section class="toolbar">
+
 
             <button
                 class="btn-primary"
@@ -741,11 +1378,13 @@ a {
 
             </button>
 
+
             <input
                 type="search"
                 id="search"
                 placeholder="Search clients..."
                 oninput="renderClients()">
+
 
             <select
                 id="statusFilter"
@@ -755,20 +1394,41 @@ a {
                     All Statuses
                 </option>
 
-                <option>Under Review</option>
-                <option>Pending</option>
-                <option>Completed</option>
-                <option>Archived</option>
-                <option>Overdue</option>
+
+                <option>
+                    Under Review
+                </option>
+
+
+                <option>
+                    Pending
+                </option>
+
+
+                <option>
+                    Completed
+                </option>
+
+
+                <option>
+                    Archived
+                </option>
+
+
+                <option>
+                    Overdue
+                </option>
 
             </select>
 
         </section>
 
 
+
         <!-- CLIENT TABLE -->
 
         <section class="table-container">
+
 
             <table>
 
@@ -776,21 +1436,58 @@ a {
 
                     <tr>
 
-                        <th>Client</th>
-                        <th>Contact</th>
-                        <th>Service</th>
-                        <th>Invoice</th>
-                        <th>Amount</th>
-                        <th>Due Date</th>
-                        <th>Status</th>
-                        <th>Documents</th>
-                        <th>Actions</th>
+                        <th>
+                            Client
+                        </th>
+
+
+                        <th>
+                            Contact
+                        </th>
+
+
+                        <th>
+                            Service
+                        </th>
+
+
+                        <th>
+                            Invoice
+                        </th>
+
+
+                        <th>
+                            Amount
+                        </th>
+
+
+                        <th>
+                            Due Date
+                        </th>
+
+
+                        <th>
+                            Status
+                        </th>
+
+
+                        <th>
+                            Documents
+                        </th>
+
+
+                        <th>
+                            Actions
+                        </th>
 
                     </tr>
 
                 </thead>
 
-                <tbody id="clientTable"></tbody>
+
+                <tbody
+                    id="clientTable">
+                </tbody>
 
             </table>
 
@@ -801,19 +1498,29 @@ a {
 </div>
 
 
-<!-- =========================================================
+
+<!-- ==========================================================
      CLIENT MODAL
-========================================================= -->
+=========================================================== -->
 
-<div id="clientModal" class="modal">
+<div
+    id="clientModal"
+    class="modal">
 
-    <div class="modal-content">
 
-        <div class="modal-header">
+    <div
+        class="modal-content">
 
-            <h2 id="modalTitle">
+
+        <div
+            class="modal-header">
+
+
+            <h2
+                id="modalTitle">
                 Add Client
             </h2>
+
 
             <button
                 class="btn-light"
@@ -825,11 +1532,14 @@ a {
 
         </div>
 
+
         <input
             type="hidden"
             id="clientId">
 
+
         <div class="form-grid">
+
 
             <div class="form-group">
 
@@ -837,11 +1547,13 @@ a {
                     Company Name *
                 </label>
 
+
                 <input
                     id="companyName"
                     placeholder="ABC Company">
 
             </div>
+
 
             <div class="form-group">
 
@@ -849,17 +1561,20 @@ a {
                     Contact Name
                 </label>
 
+
                 <input
                     id="contactName"
                     placeholder="John Smith">
 
             </div>
 
+
             <div class="form-group">
 
                 <label>
                     Email
                 </label>
+
 
                 <input
                     type="email"
@@ -868,11 +1583,13 @@ a {
 
             </div>
 
+
             <div class="form-group">
 
                 <label>
                     Phone
                 </label>
+
 
                 <input
                     id="clientPhone"
@@ -880,11 +1597,13 @@ a {
 
             </div>
 
+
             <div class="form-group">
 
                 <label>
                     Service
                 </label>
+
 
                 <input
                     id="service"
@@ -892,11 +1611,13 @@ a {
 
             </div>
 
+
             <div class="form-group">
 
                 <label>
                     Invoice Number
                 </label>
+
 
                 <input
                     id="invoiceNumber"
@@ -904,11 +1625,13 @@ a {
 
             </div>
 
+
             <div class="form-group">
 
                 <label>
                     Invoice Amount
                 </label>
+
 
                 <input
                     type="number"
@@ -919,11 +1642,13 @@ a {
 
             </div>
 
+
             <div class="form-group">
 
                 <label>
                     Due Date
                 </label>
+
 
                 <input
                     type="date"
@@ -931,29 +1656,48 @@ a {
 
             </div>
 
+
             <div class="form-group">
 
                 <label>
                     Status
                 </label>
 
-                <select id="clientStatus">
 
-                    <option>Under Review</option>
-                    <option>Pending</option>
-                    <option>Completed</option>
-                    <option>Archived</option>
-                    <option>Overdue</option>
+                <select
+                    id="clientStatus">
+
+                    <option>
+                        Under Review
+                    </option>
+
+                    <option>
+                        Pending
+                    </option>
+
+                    <option>
+                        Completed
+                    </option>
+
+                    <option>
+                        Archived
+                    </option>
+
+                    <option>
+                        Overdue
+                    </option>
 
                 </select>
 
             </div>
+
 
             <div class="form-group full">
 
                 <label>
                     Notes
                 </label>
+
 
                 <textarea
                     id="notes"
@@ -964,49 +1708,93 @@ a {
             </div>
 
 
-            <!-- DOCUMENTS -->
 
-            <div class="form-group full">
+            <!-- =================================================
+                 GOOGLE DRIVE
+            ================================================== -->
 
-                <div class="documents-section">
+            <div
+                class="form-group full">
+
+
+                <div
+                    class="documents-section">
+
 
                     <label>
-                        Client Documents
+                        Google Drive Documents
                     </label>
 
-                    <div class="documents-toolbar">
+
+                    <div
+                        id="driveConnectionStatus"
+                        class="drive-connected hidden">
+                    </div>
+
+
+                    <div
+                        class="documents-toolbar">
+
 
                         <button
                             type="button"
                             class="btn-success"
-                            onclick="openDriveUploadPicker()">
+                            onclick="connectGoogleDrive()">
 
-                            Upload to Google Drive
+                            Connect Google Drive
 
                         </button>
+
+
+                        <button
+                            type="button"
+                            class="btn-success"
+                            onclick="chooseUploadFile()">
+
+                            Upload File
+
+                        </button>
+
 
                         <button
                             type="button"
                             class="btn-primary"
-                            onclick="openDriveSelectPicker()">
+                            onclick="showDriveFiles()">
 
                             Select Existing File
 
                         </button>
 
+
+                        <input
+                            type="file"
+                            id="driveFileInput"
+                            class="document-input"
+                            onchange="uploadSelectedFile(event)">
+
                     </div>
+
 
                     <div
                         id="driveStatus"
                         class="drive-status">
                     </div>
 
+
+                    <div
+                        id="driveFileBrowser"
+                        class="drive-file-browser hidden">
+                    </div>
+
+
                     <div
                         id="clientDocuments"
                         class="documents-list">
 
                         <p class="muted">
+
                             Save the client before adding documents.
+
                         </p>
 
                     </div>
@@ -1018,7 +1806,10 @@ a {
         </div>
 
 
-        <div class="modal-footer">
+
+        <div
+            class="modal-footer">
+
 
             <button
                 class="btn-primary"
@@ -1027,6 +1818,7 @@ a {
                 Save Client
 
             </button>
+
 
             <button
                 class="btn-secondary"
@@ -1043,45 +1835,49 @@ a {
 </div>
 
 
+
 <script>
 
-/* =========================================================
-   SUPABASE
-========================================================= */
+
+/* ==========================================================
+   SUPABASE CONFIGURATION
+=========================================================== */
 
 const SUPABASE_URL =
     "https://ujsnwtbdoumtqnnvopti.supabase.co";
 
+
 const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_lXhvukwKVSEuQC0UlBPuLg_KNWRxfpW";
+    "sb_publishable_lXhvukKVSEuQC0UlBPuLg_KNWRxfpW";
+
 
 const supabaseClient =
     supabase.createClient(
+
         SUPABASE_URL,
+
         SUPABASE_PUBLISHABLE_KEY
+
     );
 
 
-/* =========================================================
-   GOOGLE CLOUD
-========================================================= */
+/* ==========================================================
+   GOOGLE OAUTH
+   NO GOOGLE API KEY
+   NO GOOGLE CLIENT SECRET
+=========================================================== */
 
 const GOOGLE_CLIENT_ID =
     "778499336500-v853cm1l21fu82i4g4t85b6urj3t0ap8.apps.googleusercontent.com";
 
-const GOOGLE_API_KEY =
-    "AIzaSyCRf531BtpZQilnpvTodUKq8ERyRsK0QIg";
-
-const GOOGLE_APP_ID =
-    "778499336500";
 
 const GOOGLE_DRIVE_SCOPE =
     "https://www.googleapis.com/auth/drive.file";
 
 
-/* =========================================================
+/* ==========================================================
    STATE
-========================================================= */
+=========================================================== */
 
 let clients = [];
 
@@ -1089,59 +1885,28 @@ let currentUser = null;
 
 let currentRole = null;
 
-let tokenClient = null;
+let googleTokenClient = null;
 
-let accessToken = null;
-
-let pickerReady = false;
-
-let gisReady = false;
+let googleAccessToken = null;
 
 
-/* =========================================================
-   GOOGLE INITIALIZATION
-========================================================= */
+/* ==========================================================
+   GOOGLE IDENTITY INITIALIZATION
+=========================================================== */
 
-function gapiLoaded() {
-
-    if (typeof gapi === "undefined") {
-
-        console.error(
-            "Google API library did not load."
-        );
-
-        return;
-    }
-
-    gapi.load(
-        "picker",
-        function() {
-
-            pickerReady = true;
-
-            console.log(
-                "Google Picker loaded."
-            );
-
-        }
-    );
-}
-
-
-function gisLoaded() {
+function initializeGoogle() {
 
     if (
-        typeof google === "undefined"
+        typeof google ===
+        "undefined"
     ) {
 
-        console.error(
-            "Google Identity Services did not load."
-        );
-
         return;
+
     }
 
-    tokenClient =
+
+    googleTokenClient =
         google.accounts.oauth2.initTokenClient({
 
             client_id:
@@ -1151,47 +1916,226 @@ function gisLoaded() {
                 GOOGLE_DRIVE_SCOPE,
 
             callback:
-                function() {}
+                function(response) {
 
-        });
+                    if (
+                        response.error
+                    ) {
 
-    gisReady = true;
+                        console.error(
+                            "Google OAuth error:",
+                            response
+                        );
 
-    console.log(
-        "Google Identity Services loaded."
-    );
+                        setDriveStatus(
+                            "Google authorization failed: " +
+                            (
+                                response.error_description ||
+                                response.error ||
+                                "Unknown error"
+                            ),
+                            true
+                        );
+
+                        return;
+
+                    }
+
+
+                    googleAccessToken =
+                        response.access_token;
+
+
+                    setDriveConnected(
+                        true
+                    );
+
+
+                    setDriveStatus(
+                        "Google Drive connected."
+                    );
+
+
+                    /*
+                       Refresh the document/file information
+                       after authorization.
+                    */
+
+                    const clientId =
+                        document.getElementById(
+                            "clientId"
+                        ).value;
+
+
+                    if (
+                        clientId
+                    ) {
+
+                        loadClientDocuments(
+                            clientId
+                        );
+
+                    }
+
+                }
+
+            });
+
 }
 
 
-/* =========================================================
-   GOOGLE AUTH
-========================================================= */
+window.addEventListener(
+    "load",
+    function() {
 
-function authorizeGoogleDrive(
-    callback
+        /*
+           Google Identity Services loads asynchronously.
+        */
+
+        const waitForGoogle =
+            setInterval(
+                function() {
+
+                    if (
+                        typeof google !==
+                        "undefined" &&
+                        google.accounts &&
+                        google.accounts.oauth2
+                    ) {
+
+                        clearInterval(
+                            waitForGoogle
+                        );
+
+                        initializeGoogle();
+
+                    }
+
+                },
+                100
+            );
+
+
+        /*
+           Stop checking after 15 seconds.
+        */
+
+        setTimeout(
+            function() {
+
+                clearInterval(
+                    waitForGoogle
+                );
+
+            },
+            15000
+        );
+
+    }
+);
+
+
+/* ==========================================================
+   DRIVE UI
+=========================================================== */
+
+function setDriveStatus(
+    message,
+    isError = false
 ) {
 
-    if (!pickerReady) {
+    const element =
+        document.getElementById(
+            "driveStatus"
+        );
 
-        alert(
-            "Google Picker has not finished loading. " +
-            "Please refresh the page and try again."
+
+    element.textContent =
+        message;
+
+
+    element.className =
+        isError
+        ?
+        "drive-status error"
+        :
+        "drive-status";
+
+}
+
+
+function setDriveConnected(
+    connected
+) {
+
+    const element =
+        document.getElementById(
+            "driveConnectionStatus"
+        );
+
+
+    if (
+        connected
+    ) {
+
+        element.textContent =
+            "Google Drive is connected for this session.";
+
+        element.classList.remove(
+            "hidden"
+        );
+
+    } else {
+
+        element.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+/* ==========================================================
+   CONNECT GOOGLE DRIVE
+=========================================================== */
+
+function connectGoogleDrive() {
+
+    if (
+        !googleTokenClient
+    ) {
+
+        /*
+           Try one more initialization in case
+           Google loaded after the page.
+        */
+
+        initializeGoogle();
+
+    }
+
+
+    if (
+        !googleTokenClient
+    ) {
+
+        setDriveStatus(
+            "Google authorization is still loading. Please try again.",
+            true
         );
 
         return;
+
     }
 
-    if (!gisReady || !tokenClient) {
 
-        alert(
-            "Google authentication has not finished loading. " +
-            "Please refresh the page and try again."
-        );
+    setDriveStatus(
+        "Waiting for Google authorization..."
+    );
 
-        return;
-    }
 
-    tokenClient.callback =
+    googleTokenClient.callback =
         function(response) {
 
             if (
@@ -1199,200 +2143,231 @@ function authorizeGoogleDrive(
             ) {
 
                 console.error(
-                    "Google OAuth error:",
                     response
                 );
 
-                alert(
-                    "Google Drive authorization failed.\n\n" +
-                    "Error: " +
+
+                setDriveStatus(
+
+                    "Google authorization failed: " +
                     (
+                        response.error_description ||
                         response.error ||
-                        "Unknown Google authorization error"
-                    )
+                        "Unknown error"
+                    ),
+
+                    true
                 );
 
+
                 return;
+
             }
 
-            accessToken =
+
+            googleAccessToken =
                 response.access_token;
 
-            callback();
+
+            setDriveConnected(
+                true
+            );
+
+
+            setDriveStatus(
+                "Google Drive connected."
+            );
+
+
+            const clientId =
+                document.getElementById(
+                    "clientId"
+                ).value;
+
+
+            if (
+                clientId
+            ) {
+
+                loadClientDocuments(
+                    clientId
+                );
+
+            }
+
         };
 
 
-    tokenClient.requestAccessToken({
+    googleTokenClient.requestAccessToken({
 
         prompt:
-            accessToken
-            ? ""
-            : "consent"
+            googleAccessToken
+            ?
+            ""
+            :
+            "consent"
 
     });
 
 }
 
 
-/* =========================================================
-   UPLOAD TO GOOGLE DRIVE
-========================================================= */
+/* ==========================================================
+   ENSURE GOOGLE TOKEN
+=========================================================== */
 
-function openDriveUploadPicker() {
-
-    authorizeGoogleDrive(
-        function() {
-
-            const clientId =
-                document.getElementById(
-                    "clientId"
-                ).value;
-
-            if (!clientId) {
-
-                alert(
-                    "Please save the client first."
-                );
-
-                return;
-            }
-
-
-            const uploadView =
-                new google.picker.DocsUploadView();
-
-
-            const picker =
-                new google.picker.PickerBuilder()
-
-                    .setDeveloperKey(
-                        GOOGLE_API_KEY
-                    )
-
-                    .setAppId(
-                        GOOGLE_APP_ID
-                    )
-
-                    .setOAuthToken(
-                        accessToken
-                    )
-
-                    .addView(
-                        uploadView
-                    )
-
-                    .setCallback(
-                        drivePickerCallback
-                    )
-
-                    .build();
-
-
-            picker.setVisible(
-                true
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SELECT EXISTING DRIVE FILE
-========================================================= */
-
-function openDriveSelectPicker() {
-
-    authorizeGoogleDrive(
-        function() {
-
-            const clientId =
-                document.getElementById(
-                    "clientId"
-                ).value;
-
-            if (!clientId) {
-
-                alert(
-                    "Please save the client first."
-                );
-
-                return;
-            }
-
-
-            const docsView =
-                new google.picker.DocsView(
-                    google.picker.ViewId.DOCS
-                );
-
-
-            const picker =
-                new google.picker.PickerBuilder()
-
-                    .setDeveloperKey(
-                        GOOGLE_API_KEY
-                    )
-
-                    .setAppId(
-                        GOOGLE_APP_ID
-                    )
-
-                    .setOAuthToken(
-                        accessToken
-                    )
-
-                    .addView(
-                        docsView
-                    )
-
-                    .setCallback(
-                        drivePickerCallback
-                    )
-
-                    .build();
-
-
-            picker.setVisible(
-                true
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   PICKER CALLBACK
-========================================================= */
-
-async function drivePickerCallback(
-    data
+function ensureGoogleAccess(
+    callback
 ) {
 
     if (
-        data.action !==
-        google.picker.Action.PICKED
+        googleAccessToken
     ) {
 
+        callback(
+            googleAccessToken
+        );
+
         return;
+
     }
 
 
-    const selectedDocuments =
-        data[
-            google.picker.Response.DOCUMENTS
-        ];
+    if (
+        !googleTokenClient
+    ) {
+
+        initializeGoogle();
+
+    }
 
 
     if (
-        !selectedDocuments ||
-        selectedDocuments.length === 0
+        !googleTokenClient
+    ) {
+
+        setDriveStatus(
+            "Google authorization is not ready.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    googleTokenClient.callback =
+        function(response) {
+
+            if (
+                response.error
+            ) {
+
+                console.error(
+                    response
+                );
+
+
+                setDriveStatus(
+
+                    "Google authorization failed: " +
+                    (
+                        response.error_description ||
+                        response.error ||
+                        "Unknown error"
+                    ),
+
+                    true
+                );
+
+
+                return;
+
+            }
+
+
+            googleAccessToken =
+                response.access_token;
+
+
+            setDriveConnected(
+                true
+            );
+
+
+            callback(
+                googleAccessToken
+            );
+
+        };
+
+
+    googleTokenClient.requestAccessToken({
+
+        prompt:
+            "consent"
+
+    });
+
+}
+
+
+/* ==========================================================
+   SELECT LOCAL FILE TO UPLOAD
+=========================================================== */
+
+function chooseUploadFile() {
+
+    const clientId =
+        document.getElementById(
+            "clientId"
+        ).value;
+
+
+    if (
+        !clientId
+    ) {
+
+        alert(
+            "Please save the client before uploading documents."
+        );
+
+        return;
+
+    }
+
+
+    ensureGoogleAccess(
+        function() {
+
+            document.getElementById(
+                "driveFileInput"
+            ).click();
+
+        }
+    );
+
+}
+
+
+/* ==========================================================
+   UPLOAD FILE TO GOOGLE DRIVE
+=========================================================== */
+
+async function uploadSelectedFile(
+    event
+) {
+
+    const file =
+        event.target.files[0];
+
+
+    if (
+        !file
     ) {
 
         return;
+
     }
 
 
@@ -1402,82 +2377,178 @@ async function drivePickerCallback(
         ).value;
 
 
-    if (!clientId) {
+    if (
+        !clientId
+    ) {
 
         alert(
-            "Please save the client before adding documents."
+            "Please save the client first."
         );
 
         return;
+
     }
 
 
-    document.getElementById(
-        "driveStatus"
-    ).textContent =
-        "Adding document(s)...";
-
-
-    let addedCount = 0;
-
-
-    for (
-        const selected of selectedDocuments
+    if (
+        !googleAccessToken
     ) {
 
-        const fileId =
-            selected[
-                google.picker.Document.ID
-            ];
+        alert(
+            "Please connect Google Drive first."
+        );
+
+        return;
+
+    }
 
 
-        const fileName =
-            selected[
-                google.picker.Document.NAME
-            ]
-            ||
-            "Google Drive File";
+    setDriveStatus(
+        "Uploading " +
+        file.name +
+        " to Google Drive..."
+    );
 
 
-        const fileUrl =
-            selected.url
-            ||
-            `https://drive.google.com/file/d/${fileId}/view`;
+    try {
+
+        /*
+           Upload using Google's multipart upload
+           endpoint with the user's OAuth token.
+        */
+
+        const metadata = {
+
+            name:
+                file.name,
+
+            mimeType:
+                file.type
+                ||
+                "application/octet-stream"
+
+        };
 
 
-        const mimeType =
-            selected[
-                google.picker.Document.MIME_TYPE
-            ]
-            ||
-            null;
+        const multipartBody =
+            buildMultipartBody(
+                metadata,
+                file
+            );
 
+
+        const response =
+            await fetch(
+
+                "https://www.googleapis.com/upload/drive/v3/files?" +
+                "uploadType=multipart&fields=id,name,mimeType,webViewLink",
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Authorization":
+                            "Bearer " +
+                            googleAccessToken,
+
+                        "Content-Type":
+                            multipartBody.contentType
+
+                    },
+
+                    body:
+                        multipartBody.body
+
+                }
+
+            );
+
+
+        /*
+           Token expired or revoked.
+        */
+
+        if (
+            response.status ===
+            401
+        ) {
+
+            googleAccessToken =
+                null;
+
+
+            setDriveConnected(
+                false
+            );
+
+
+            setDriveStatus(
+                "Google authorization expired. Please reconnect.",
+                true
+            );
+
+
+            return;
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+
+                result.error?.message
+                ||
+                "Google Drive upload failed."
+
+            );
+
+        }
+
+
+        /*
+           Save the Drive file information
+           in Supabase.
+        */
 
         const {
             error
         } =
             await supabaseClient
-
                 .from(
                     "client_documents"
                 )
-
                 .insert({
 
                     client_id:
                         clientId,
 
                     file_name:
-                        fileName,
+                        result.name
+                        ||
+                        file.name,
 
                     file_url:
-                        fileUrl,
+                        result.webViewLink
+                        ||
+                        `https://drive.google.com/file/d/${result.id}/view`,
 
                     google_file_id:
-                        fileId,
+                        result.id,
 
                     mime_type:
-                        mimeType,
+                        result.mimeType
+                        ||
+                        file.type,
 
                     uploaded_by:
                         currentUser.id
@@ -1489,30 +2560,506 @@ async function drivePickerCallback(
             error
         ) {
 
-            console.error(
-                "Document save error:",
-                error
-            );
-
-            alert(
-                "Google Drive selected the file, " +
-                "but Supabase could not save it:\n\n" +
+            throw new Error(
+                "Google Drive upload succeeded, " +
+                "but Supabase could not save the document: " +
                 error.message
             );
 
-            continue;
         }
 
 
-        addedCount++;
+        setDriveStatus(
+            "Uploaded successfully: " +
+            file.name
+        );
+
+
+        await loadClientDocuments(
+            clientId
+        );
+
+
+    } catch (
+        error
+    ) {
+
+        console.error(
+            "Drive upload error:",
+            error
+        );
+
+
+        setDriveStatus(
+            error.message,
+            true
+        );
+
     }
 
 
-    document.getElementById(
-        "driveStatus"
-    ).textContent =
-        addedCount +
-        " document(s) added.";
+    /*
+       Reset file input so the same file
+       can be selected again.
+    */
+
+    event.target.value =
+        "";
+
+}
+
+
+/* ==========================================================
+   BUILD MULTIPART BODY
+=========================================================== */
+
+function buildMultipartBody(
+    metadata,
+    file
+) {
+
+    const boundary =
+        "-------EFRBoundary" +
+        Date.now();
+
+
+    const metadataJson =
+        JSON.stringify(
+            metadata
+        );
+
+
+    const reader =
+        new FileReaderSync();
+
+
+    /*
+       FileReaderSync is only available in
+       worker contexts, so we don't use it.
+    */
+
+    /*
+       Instead create the multipart body with
+       Blob objects.
+    */
+
+    const body =
+        new Blob(
+
+            [
+
+                "--" +
+                boundary +
+                "\r\n",
+
+                "Content-Type: application/json; charset=UTF-8\r\n",
+                "\r\n",
+
+                metadataJson,
+
+                "\r\n",
+
+                "--" +
+                boundary +
+                "\r\n",
+
+                "Content-Type: " +
+                (
+                    file.type ||
+                    "application/octet-stream"
+                ) +
+                "\r\n\r\n",
+
+                file,
+
+                "\r\n",
+
+                "--" +
+                boundary +
+                "--"
+
+            ],
+
+            {
+                type:
+                    "multipart/related; boundary=" +
+                    boundary
+            }
+
+        );
+
+
+    return {
+
+        body:
+
+            body,
+
+        contentType:
+
+            "multipart/related; boundary=" +
+            boundary
+
+    };
+
+}
+
+
+/* ==========================================================
+   DRIVE FILE LIST
+=========================================================== */
+
+async function showDriveFiles() {
+
+    const clientId =
+        document.getElementById(
+            "clientId"
+        ).value;
+
+
+    if (
+        !clientId
+    ) {
+
+        alert(
+            "Please save the client first."
+        );
+
+        return;
+
+    }
+
+
+    ensureGoogleAccess(
+        async function() {
+
+            await loadDriveFiles();
+
+        }
+    );
+
+}
+
+
+/* ==========================================================
+   LOAD DRIVE FILES
+=========================================================== */
+
+async function loadDriveFiles() {
+
+    const browser =
+        document.getElementById(
+            "driveFileBrowser"
+        );
+
+
+    browser.classList.remove(
+        "hidden"
+    );
+
+
+    browser.innerHTML = `
+
+        <div
+            style="padding:15px;">
+
+            Loading Google Drive files...
+
+        </div>
+
+    `;
+
+
+    try {
+
+        /*
+           Because we use drive.file, this list represents
+           files available to the app rather than every file
+           in the user's entire Drive.
+        */
+
+        const url =
+            "https://www.googleapis.com/drive/v3/files?" +
+
+            new URLSearchParams({
+
+                pageSize:
+                    "50",
+
+                orderBy:
+                    "modifiedTime desc",
+
+                fields:
+                    "files(id,name,mimeType,webViewLink,modifiedTime)",
+
+                q:
+                    "trashed = false"
+
+            });
+
+
+        const response =
+            await fetch(
+
+                url,
+
+                {
+
+                    headers: {
+
+                        "Authorization":
+                            "Bearer " +
+                            googleAccessToken
+
+                    }
+
+                }
+
+            );
+
+
+        if (
+            response.status ===
+            401
+        ) {
+
+            googleAccessToken =
+                null;
+
+
+            setDriveConnected(
+                false
+            );
+
+
+            throw new Error(
+                "Google authorization expired. Please reconnect."
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+
+                result.error?.message
+                ||
+                "Unable to read Google Drive."
+
+            );
+
+        }
+
+
+        browser.innerHTML =
+            "";
+
+
+        if (
+            !result.files ||
+            result.files.length === 0
+        ) {
+
+            browser.innerHTML = `
+
+                <div
+                    style="padding:15px;">
+
+                    No Drive files are available to this application yet.
+
+                </div>
+
+            `;
+
+
+            return;
+
+        }
+
+
+        result.files.forEach(
+            file => {
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                row.className =
+                    "drive-file";
+
+
+                row.innerHTML = `
+
+                    <div
+                        class="drive-file-name">
+
+                        <strong>
+
+                            ${escapeHtml(
+                                file.name
+                            )}
+
+                        </strong>
+
+                        <br>
+
+                        <small>
+
+                            ${escapeHtml(
+                                file.mimeType ||
+                                "Google Drive file"
+                            )}
+
+                        </small>
+
+                    </div>
+
+
+                    <button
+                        class="btn-primary"
+                        onclick="attachExistingDriveFile(
+                            '${escapeAttribute(file.id)}',
+                            '${escapeAttribute(file.name)}',
+                            '${escapeAttribute(file.mimeType || "")}',
+                            '${escapeAttribute(
+                                file.webViewLink ||
+                                `https://drive.google.com/file/d/${file.id}/view`
+                            )}'
+                        )">
+
+                        Attach
+
+                    </button>
+
+                `;
+
+
+                browser.appendChild(
+                    row
+                );
+
+            }
+        );
+
+
+    } catch (
+        error
+    ) {
+
+        console.error(
+            "Drive list error:",
+            error
+        );
+
+
+        browser.innerHTML = `
+
+            <div
+                style="padding:15px;"
+                class="error">
+
+                ${escapeHtml(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ==========================================================
+   ATTACH EXISTING DRIVE FILE
+=========================================================== */
+
+async function attachExistingDriveFile(
+    fileId,
+    fileName,
+    mimeType,
+    fileUrl
+) {
+
+    const clientId =
+        document.getElementById(
+            "clientId"
+        ).value;
+
+
+    if (
+        !clientId
+    ) {
+
+        alert(
+            "Please save the client first."
+        );
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from(
+                "client_documents"
+            )
+            .insert({
+
+                client_id:
+                    clientId,
+
+                file_name:
+                    fileName,
+
+                file_url:
+                    fileUrl,
+
+                google_file_id:
+                    fileId,
+
+                mime_type:
+                    mimeType
+                    ||
+                    null,
+
+                uploaded_by:
+                    currentUser.id
+
+            });
+
+
+    if (
+        error
+    ) {
+
+        alert(
+            "Unable to attach the Drive file:\n\n" +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    setDriveStatus(
+        "Drive file attached: " +
+        fileName
+    );
 
 
     await loadClientDocuments(
@@ -1522,9 +3069,9 @@ async function drivePickerCallback(
 }
 
 
-/* =========================================================
-   LOGIN
-========================================================= */
+/* ==========================================================
+   CLIENT LOGIN
+=========================================================== */
 
 async function login() {
 
@@ -1549,7 +3096,9 @@ async function login() {
         );
 
 
-    message.textContent = "";
+    message.textContent =
+        "";
+
 
     message.className =
         "message";
@@ -1563,11 +3112,14 @@ async function login() {
         message.textContent =
             "Please enter your email and password.";
 
+
         message.classList.add(
             "error"
         );
 
+
         return;
+
     }
 
 
@@ -1595,11 +3147,14 @@ async function login() {
                 "Login failed: " +
                 error.message;
 
+
             message.classList.add(
                 "error"
             );
 
+
             return;
+
         }
 
 
@@ -1608,6 +3163,7 @@ async function login() {
 
 
         await initializeApp();
+
 
     } catch (
         error
@@ -1620,17 +3176,19 @@ async function login() {
                 "Unexpected error."
             );
 
+
         message.classList.add(
             "error"
         );
 
     }
+
 }
 
 
-/* =========================================================
-   INITIALIZE
-========================================================= */
+/* ==========================================================
+   INITIALIZE APP
+=========================================================== */
 
 async function initializeApp() {
 
@@ -1644,9 +3202,12 @@ async function initializeApp() {
             .getUser();
 
 
-    if (!user) {
+    if (
+        !user
+    ) {
 
         return;
+
     }
 
 
@@ -1692,13 +3253,15 @@ async function initializeApp() {
 
 
         return;
+
     }
 
 
     currentRole =
         String(
             roleData.role
-        ).toLowerCase();
+        )
+        .toLowerCase();
 
 
     if (
@@ -1746,9 +3309,9 @@ async function initializeApp() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    LOAD CLIENTS
-========================================================= */
+=========================================================== */
 
 async function loadClients() {
 
@@ -1784,7 +3347,9 @@ async function loadClients() {
             error.message
         );
 
+
         return;
+
     }
 
 
@@ -1800,9 +3365,9 @@ async function loadClients() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    DASHBOARD
-========================================================= */
+=========================================================== */
 
 function updateDashboard() {
 
@@ -1854,11 +3419,13 @@ function updateDashboard() {
 
     const outstanding =
         clients
+
             .filter(
                 c =>
                     c.status !==
                     "Completed"
             )
+
             .reduce(
                 (
                     total,
@@ -1869,6 +3436,7 @@ function updateDashboard() {
                         c.invoice_amount ||
                         0
                     ),
+
                 0
             );
 
@@ -1882,16 +3450,18 @@ function updateDashboard() {
             {
                 minimumFractionDigits:
                     2,
+
                 maximumFractionDigits:
                     2
             }
         );
+
 }
 
 
-/* =========================================================
+/* ==========================================================
    RENDER CLIENTS
-========================================================= */
+=========================================================== */
 
 function renderClients() {
 
@@ -1910,6 +3480,12 @@ function renderClients() {
         ).value;
 
 
+    const table =
+        document.getElementById(
+            "clientTable"
+        );
+
+
     const filtered =
         clients.filter(
             client => {
@@ -1918,36 +3494,47 @@ function renderClients() {
                     [
 
                         client.company_name,
+
                         client.contact_name,
+
                         client.email,
+
                         client.phone,
+
                         client.service,
+
                         client.invoice_number,
+
                         client.notes
 
                     ]
-
-                    .filter(Boolean)
-                    .join(" ")
+                    .filter(
+                        Boolean
+                    )
+                    .join(
+                        " "
+                    )
                     .toLowerCase();
 
 
                 return (
-                    text.includes(search) &&
+
+                    text.includes(
+                        search
+                    )
+
+                    &&
+
                     (
-                        !selectedStatus ||
+                        !selectedStatus
+                        ||
                         client.status ===
                         selectedStatus
                     )
+
                 );
 
             }
-        );
-
-
-    const table =
-        document.getElementById(
-            "clientTable"
         );
 
 
@@ -1978,6 +3565,7 @@ function renderClients() {
 
 
         return;
+
     }
 
 
@@ -2015,7 +3603,9 @@ function renderClients() {
 
                     ${
                         client.email
+
                         ?
+
                         `
                         <br>
 
@@ -2027,7 +3617,9 @@ function renderClients() {
 
                         </small>
                         `
+
                         :
+
                         ""
                     }
 
@@ -2035,18 +3627,22 @@ function renderClients() {
 
 
                 <td>
+
                     ${escapeHtml(
                         client.service ||
                         ""
                     )}
+
                 </td>
 
 
                 <td>
+
                     ${escapeHtml(
                         client.invoice_number ||
                         ""
                     )}
+
                 </td>
 
 
@@ -2060,6 +3656,7 @@ function renderClients() {
                         {
                             minimumFractionDigits:
                                 2,
+
                             maximumFractionDigits:
                                 2
                         }
@@ -2157,12 +3754,13 @@ function renderClients() {
 
         }
     );
+
 }
 
 
-/* =========================================================
-   STATUS CLASS
-========================================================= */
+/* ==========================================================
+   STATUS
+=========================================================== */
 
 function getStatusClass(
     status
@@ -2191,50 +3789,41 @@ function getStatusClass(
             return "";
 
     }
+
 }
 
 
-/* =========================================================
+/* ==========================================================
    DATE
-========================================================= */
+=========================================================== */
 
 function formatDate(
     value
 ) {
 
-    if (!value) {
+    if (
+        !value
+    ) {
+
         return "";
+
     }
 
 
     return new Date(
-        value + "T00:00:00"
-    ).toLocaleDateString(
+        value +
+        "T00:00:00"
+    )
+    .toLocaleDateString(
         "en-US"
     );
+
 }
 
 
-function formatDateTime(
-    value
-) {
-
-    if (!value) {
-        return "";
-    }
-
-
-    return new Date(
-        value
-    ).toLocaleString(
-        "en-US"
-    );
-}
-
-
-/* =========================================================
+/* ==========================================================
    NEW CLIENT
-========================================================= */
+=========================================================== */
 
 function openNewClient() {
 
@@ -2261,24 +3850,34 @@ function openNewClient() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    CLEAR FORM
-========================================================= */
+=========================================================== */
 
 function clearForm() {
 
     [
+
         "companyName",
+
         "contactName",
+
         "clientEmail",
+
         "clientPhone",
+
         "service",
+
         "invoiceNumber",
+
         "invoiceAmount",
+
         "dueDate",
+
         "notes"
 
-    ].forEach(
+    ]
+    .forEach(
         id => {
 
             document.getElementById(
@@ -2303,6 +3902,13 @@ function clearForm() {
 
 
     document.getElementById(
+        "driveFileBrowser"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
         "clientDocuments"
     ).innerHTML = `
 
@@ -2313,12 +3919,13 @@ function clearForm() {
         </p>
 
     `;
+
 }
 
 
-/* =========================================================
+/* ==========================================================
    EDIT CLIENT
-========================================================= */
+=========================================================== */
 
 async function editClient(
     id
@@ -2332,8 +3939,12 @@ async function editClient(
         );
 
 
-    if (!client) {
+    if (
+        !client
+    ) {
+
         return;
+
     }
 
 
@@ -2432,37 +4043,46 @@ async function editClient(
 }
 
 
-/* =========================================================
+/* ==========================================================
    SAVE CLIENT
-========================================================= */
+=========================================================== */
 
 async function saveClient() {
 
-    if (!currentUser) {
+    if (
+        !currentUser
+    ) {
 
         alert(
             "Your login session has expired."
         );
 
+
         return;
+
     }
 
 
     const companyName =
-        document.getElementById(
-            "companyName"
-        )
-        .value
-        .trim();
+        document
+            .getElementById(
+                "companyName"
+            )
+            .value
+            .trim();
 
 
-    if (!companyName) {
+    if (
+        !companyName
+    ) {
 
         alert(
             "Company name is required."
         );
 
+
         return;
+
     }
 
 
@@ -2478,68 +4098,79 @@ async function saveClient() {
             companyName,
 
         contact_name:
-            document.getElementById(
-                "contactName"
-            )
-            .value
-            .trim(),
+            document
+                .getElementById(
+                    "contactName"
+                )
+                .value
+                .trim(),
 
         email:
-            document.getElementById(
-                "clientEmail"
-            )
-            .value
-            .trim(),
+            document
+                .getElementById(
+                    "clientEmail"
+                )
+                .value
+                .trim(),
 
         phone:
-            document.getElementById(
-                "clientPhone"
-            )
-            .value
-            .trim(),
+            document
+                .getElementById(
+                    "clientPhone"
+                )
+                .value
+                .trim(),
 
         service:
-            document.getElementById(
-                "service"
-            )
-            .value
-            .trim(),
+            document
+                .getElementById(
+                    "service"
+                )
+                .value
+                .trim(),
 
         invoice_number:
-            document.getElementById(
-                "invoiceNumber"
-            )
-            .value
-            .trim(),
+            document
+                .getElementById(
+                    "invoiceNumber"
+                )
+                .value
+                .trim(),
 
         invoice_amount:
             Number(
-                document.getElementById(
-                    "invoiceAmount"
-                )
-                .value ||
-                0
+                document
+                    .getElementById(
+                        "invoiceAmount"
+                    )
+                    .value
+                    ||
+                    0
             ),
 
         due_date:
-            document.getElementById(
-                "dueDate"
-            )
-            .value ||
-            null,
+            document
+                .getElementById(
+                    "dueDate"
+                )
+                .value
+                ||
+                null,
 
         status:
-            document.getElementById(
-                "clientStatus"
-            )
-            .value,
+            document
+                .getElementById(
+                    "clientStatus"
+                )
+                .value,
 
         notes:
-            document.getElementById(
-                "notes"
-            )
-            .value
-            .trim(),
+            document
+                .getElementById(
+                    "notes"
+                )
+                .value
+                .trim(),
 
         updated_by:
             currentUser.id
@@ -2550,13 +4181,25 @@ async function saveClient() {
     let response;
 
 
-    if (clientId) {
+    if (
+        clientId
+    ) {
 
         response =
             await supabaseClient
-                .from("clients")
-                .update(record)
-                .eq("id", clientId);
+
+                .from(
+                    "clients"
+                )
+
+                .update(
+                    record
+                )
+
+                .eq(
+                    "id",
+                    clientId
+                );
 
     } else {
 
@@ -2566,20 +4209,30 @@ async function saveClient() {
 
         response =
             await supabaseClient
-                .from("clients")
-                .insert(record);
+
+                .from(
+                    "clients"
+                )
+
+                .insert(
+                    record
+                );
 
     }
 
 
-    if (response.error) {
+    if (
+        response.error
+    ) {
 
         alert(
             "Unable to save client:\n\n" +
             response.error.message
         );
 
+
         return;
+
     }
 
 
@@ -2590,9 +4243,9 @@ async function saveClient() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    LOAD CLIENT DOCUMENTS
-========================================================= */
+=========================================================== */
 
 async function loadClientDocuments(
     clientId
@@ -2618,9 +4271,20 @@ async function loadClientDocuments(
         error
     } =
         await supabaseClient
-            .from("client_documents")
-            .select("*")
-            .eq("client_id", clientId)
+
+            .from(
+                "client_documents"
+            )
+
+            .select(
+                "*"
+            )
+
+            .eq(
+                "client_id",
+                clientId
+            )
+
             .order(
                 "created_at",
                 {
@@ -2630,7 +4294,9 @@ async function loadClientDocuments(
             );
 
 
-    if (error) {
+    if (
+        error
+    ) {
 
         container.innerHTML = `
 
@@ -2644,7 +4310,9 @@ async function loadClientDocuments(
 
         `;
 
+
         return;
+
     }
 
 
@@ -2656,16 +4324,21 @@ async function loadClientDocuments(
         container.innerHTML = `
 
             <p class="muted">
+
                 No documents attached.
+
             </p>
 
         `;
 
+
         return;
+
     }
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     data.forEach(
@@ -2695,26 +4368,15 @@ async function loadClientDocuments(
 
                     </div>
 
+
                     <div
                         class="document-meta">
 
                         ${escapeHtml(
-                            documentRecord.mime_type ||
+                            documentRecord.mime_type
+                            ||
                             "Google Drive document"
                         )}
-
-                        ${
-                            documentRecord.created_at
-                            ?
-                            " • Added " +
-                            escapeHtml(
-                                formatDateTime(
-                                    documentRecord.created_at
-                                )
-                            )
-                            :
-                            ""
-                        }
 
                     </div>
 
@@ -2724,13 +4386,14 @@ async function loadClientDocuments(
                 <div
                     class="document-actions">
 
+
                     <a
-                        class="document-link"
                         href="${escapeAttribute(
                             documentRecord.file_url
                         )}"
                         target="_blank"
-                        rel="noopener noreferrer">
+                        rel="noopener noreferrer"
+                        class="document-link">
 
                         Open
 
@@ -2771,12 +4434,13 @@ async function loadClientDocuments(
 
         }
     );
+
 }
 
 
-/* =========================================================
+/* ==========================================================
    VIEW CLIENT DOCUMENTS
-========================================================= */
+=========================================================== */
 
 async function viewClientDocuments(
     clientId
@@ -2790,8 +4454,12 @@ async function viewClientDocuments(
         );
 
 
-    if (!client) {
+    if (
+        !client
+    ) {
+
         return;
+
     }
 
 
@@ -2885,15 +4553,15 @@ async function viewClientDocuments(
 
 
     await loadClientDocuments(
-        client.id
+        clientId
     );
 
 }
 
 
-/* =========================================================
+/* ==========================================================
    DELETE DOCUMENT
-========================================================= */
+=========================================================== */
 
 async function deleteDocument(
     id
@@ -2908,7 +4576,9 @@ async function deleteDocument(
             "Only an administrator can delete documents."
         );
 
+
         return;
+
     }
 
 
@@ -2919,6 +4589,7 @@ async function deleteDocument(
     ) {
 
         return;
+
     }
 
 
@@ -2926,19 +4597,31 @@ async function deleteDocument(
         error
     } =
         await supabaseClient
-            .from("client_documents")
+
+            .from(
+                "client_documents"
+            )
+
             .delete()
-            .eq("id", id);
+
+            .eq(
+                "id",
+                id
+            );
 
 
-    if (error) {
+    if (
+        error
+    ) {
 
         alert(
             "Unable to remove document:\n\n" +
             error.message
         );
 
+
         return;
+
     }
 
 
@@ -2951,12 +4634,13 @@ async function deleteDocument(
     await loadClientDocuments(
         clientId
     );
+
 }
 
 
-/* =========================================================
+/* ==========================================================
    DELETE CLIENT
-========================================================= */
+=========================================================== */
 
 async function deleteClient(
     id
@@ -2971,7 +4655,9 @@ async function deleteClient(
             "Only an administrator can delete clients."
         );
 
+
         return;
+
     }
 
 
@@ -2982,6 +4668,7 @@ async function deleteClient(
     ) {
 
         return;
+
     }
 
 
@@ -2989,29 +4676,42 @@ async function deleteClient(
         error
     } =
         await supabaseClient
-            .from("clients")
+
+            .from(
+                "clients"
+            )
+
             .delete()
-            .eq("id", id);
+
+            .eq(
+                "id",
+                id
+            );
 
 
-    if (error) {
+    if (
+        error
+    ) {
 
         alert(
             "Unable to delete client:\n\n" +
             error.message
         );
 
+
         return;
+
     }
 
 
     await loadClients();
+
 }
 
 
-/* =========================================================
+/* ==========================================================
    CLOSE MODAL
-========================================================= */
+=========================================================== */
 
 function closeModal() {
 
@@ -3019,71 +4719,103 @@ function closeModal() {
         "clientModal"
     ).style.display =
         "none";
+
 }
 
 
-/* =========================================================
+/* ==========================================================
    LOGOUT
-========================================================= */
+=========================================================== */
 
 async function logout() {
 
-    await supabaseClient.auth.signOut();
+    await supabaseClient
+        .auth
+        .signOut();
 
 
-    currentUser = null;
-    currentRole = null;
-    clients = [];
+    currentUser =
+        null;
+
+
+    currentRole =
+        null;
+
+
+    clients =
+        [];
+
+
+    googleAccessToken =
+        null;
 
 
     document
-        .getElementById("app")
+        .getElementById(
+            "app"
+        )
         .classList
-        .add("hidden");
+        .add(
+            "hidden"
+        );
 
 
     document
-        .getElementById("loginPage")
+        .getElementById(
+            "loginPage"
+        )
         .classList
-        .remove("hidden");
+        .remove(
+            "hidden"
+        );
 
 
     document.getElementById(
         "email"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
         "password"
-    ).value = "";
+    ).value =
+        "";
+
 }
 
 
-/* =========================================================
+/* ==========================================================
    SECURITY HELPERS
-========================================================= */
+=========================================================== */
 
 function escapeHtml(
     value
 ) {
 
-    return String(value)
+    return String(
+        value
+    )
+
         .replaceAll(
             "&",
             "&amp;"
         )
+
         .replaceAll(
             "<",
             "&lt;"
         )
+
         .replaceAll(
             ">",
             "&gt;"
         )
+
         .replaceAll(
             '"',
             "&quot;"
         )
+
         .replaceAll(
             "'",
             "&#039;"
@@ -3096,19 +4828,25 @@ function escapeAttribute(
     value
 ) {
 
-    return String(value)
+    return String(
+        value
+    )
+
         .replaceAll(
             "&",
             "&amp;"
         )
+
         .replaceAll(
             '"',
             "&quot;"
         )
+
         .replaceAll(
             "<",
             "&lt;"
         )
+
         .replaceAll(
             ">",
             "&gt;"
@@ -3117,27 +4855,29 @@ function escapeAttribute(
 }
 
 
-/* =========================================================
-   RESTORE SESSION
-========================================================= */
+/* ==========================================================
+   RESTORE SUPABASE SESSION
+=========================================================== */
 
-supabaseClient.auth.onAuthStateChange(
-    async function(
-        event,
-        session
-    ) {
-
-        if (
-            session &&
-            !currentUser
+supabaseClient
+    .auth
+    .onAuthStateChange(
+        async function(
+            event,
+            session
         ) {
 
-            await initializeApp();
+            if (
+                session &&
+                !currentUser
+            ) {
+
+                await initializeApp();
+
+            }
 
         }
-
-    }
-);
+    );
 
 </script>
 
